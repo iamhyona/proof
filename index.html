@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>SPEC</title>
+<title>PROOF</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="SPEC">
+<meta name="apple-mobile-web-app-title" content="PROOF">
 <meta name="theme-color" content="#f2f4f6">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -69,42 +69,62 @@ main { max-width:560px; margin:0 auto; padding:14px 16px calc(80px + env(safe-ar
 #cP button { font-size:13px; }
 .cst.c2 { grid-template-columns:1.6fr 1fr; }
 
+.hdr { display:flex; align-items:center; gap:10px; } .lnk { width:32px; height:32px; border-radius:50%; background:#fff; color:var(--sub); display:flex; align-items:center; justify-content:center; }
+nav { overflow-x:auto; scrollbar-width:none; } nav::-webkit-scrollbar { display:none; } nav button { white-space:nowrap; }
+.addb { color:var(--acc); font-weight:700; }
+.no { font-style:normal; display:inline-block; min-width:22px; height:22px; line-height:22px; text-align:center; border-radius:7px; background:var(--chip); color:var(--sub); font-size:12px; margin-right:7px; }
+.drh { cursor:pointer; margin:0 !important; } .dr .fr:first-of-type { margin-top:10px; }
+.racts { display:flex; gap:6px; margin-top:10px; } .racts button { flex:1; border:0; background:var(--chip); border-radius:10px; padding:9px 0; font-size:13px; font-weight:600; color:var(--sub); } .del { color:var(--red) !important; }
+.fr select { flex:1; min-width:0; border:0; background:none; font-size:14px; padding:8px 0; outline:0; text-align:right; direction:rtl; }
+.fx { border-top:1px solid var(--line); padding:9px 0; font-size:13px; line-height:1.45; } .fx small { display:block; color:var(--mute); font-size:11px; } .fx s { color:var(--mute); margin-right:6px; } .fx b { color:var(--txt); font-weight:600; }
+.ref { border-top:1px solid var(--line); padding:10px 0; cursor:pointer; } .ref b { display:block; font-size:14px; font-weight:600; } .ref small { display:block; font-size:12px; color:var(--mute); margin-top:2px; }
+.rtab { margin:0 0 12px; } .rtab button { padding:7px 12px; font-size:13px; }
+.pi { border-top:1px solid var(--line); padding:12px 0; } .pi:first-child { border-top:0; padding-top:0; }
+.pn b { font-size:15px; } .pn em { font-style:normal; font-size:11px; font-weight:700; color:var(--acc); background:#e8f3ff; border-radius:6px; padding:2px 6px; margin-left:6px; } .pn small { display:block; font-size:12px; color:var(--mute); margin-top:3px; }
+.gs { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; } .gs button { border:0; background:var(--chip); border-radius:10px; padding:6px 10px; text-align:center; min-width:54px; } .gs b { font-size:15px; font-weight:800; display:block; } .gs b i { font-style:normal; font-size:11px; color:var(--sub); margin-left:1px; } .gs small { display:block; font-size:10px; color:var(--faint); margin-top:1px; }
+.cols { margin-top:8px; } .cols summary { font-size:12px; color:var(--acc); font-weight:600; cursor:pointer; } .cols .chips { margin-top:8px; } .cols .chips button { padding:5px 10px; font-size:12px; }
+.dsv { display:block; width:100%; height:auto; max-height:62vh; background:#fafbfc; border-radius:12px; margin:2px 0 8px; }
 </style>
 </head>
 <body>
 <header>
-  <div class="hd"><button class="brand" id="brand">SPEC</button><span class="hdt">사양서 도우미</span></div>
-  <nav id="nav"><button data-v="list">품목</button><button data-v="calc">절수</button><button data-v="paper">용지</button></nav>
+  <div class="hd"><button class="brand" id="brand">PROOF</button><span class="hdr"><span class="hdt">사양서 도우미</span><a class="lnk" id="lnk" target="_blank" rel="noopener" aria-label="시트·폴더 열기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></span></div>
+  <nav id="nav"><button data-v="doc">사양서</button><button data-v="list">품목</button><button data-v="die">전개도</button><button data-v="calc">절수</button><button data-v="ref">자료</button></nav>
 </header>
 <main id="main"></main>
 <div id="toast"></div>
-<datalist id="papers"></datalist>
+<datalist id="dl-paper"></datalist><datalist id="dl-print"></datalist><datalist id="dl-coat"></datalist><datalist id="dl-fin"></datalist><datalist id="dl-cut"></datalist><datalist id="dl-bind"></datalist><datalist id="dl-pack"></datalist>
 <script>
 /* ───── CALC: 국전·46전 절수 · 판걸이 · 로스 계산 (2026.10.06) ─────
    전지: 46전 788×1091 · 국전 636×939 (mm)
    여유 기본값: 도련 사방 3mm · 물림 10mm(긴 변 쪽) · 나머지 여백 5mm — 인쇄소마다 달라서 고칠 수 있게 */
 var PAPERS = [{ k: '46', n: '46전', s: 788, l: 1091 }, { k: 'kuk', n: '국전', s: 636, l: 939 }];
+// 결: 종목(T) = 결이 긴 변 방향 · 횡목(Y) = 짧은 변 방향
+var PAPERS_G = [{ k: '46T', n: '46전 종목', s: 788, l: 1091, g: 'L' }, { k: '46Y', n: '46전 횡목', s: 788, l: 1091, g: 'S' }, { k: 'kukT', n: '국전 종목', s: 636, l: 939, g: 'L' }, { k: 'kukY', n: '국전 횡목', s: 636, l: 939, g: 'S' }];
 var PRESETS = [['국판', 148, 210], ['신국판', 152, 225], ['46판', 128, 188], ['크라운판', 176, 248], ['46배판', 188, 257], ['국배판(A4)', 210, 297],
   ['B5', 182, 257], ['A3', 297, 420], ['엽서', 100, 148], ['포토카드', 55, 85], ['스티커 A6', 105, 148]];
 var CUTS = [2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64];
 function cq() {
   var d = { t: 'book', m: 'size', w: 148, h: 210, p: 64, q: 500, sp: 8, fl: 0, cw: 148, ch: 210, bl: 3, gr: 10, sd: 5, ex: 5, paper: '46', cut: 16 };
-  try { var o = JSON.parse(ls.get('d4:calc') || 'null'); if (o) for (var k in o) d[k] = o[k]; } catch (e) {}
+  try { var o = JSON.parse(ls.get('pr:calc') || 'null'); if (o) for (var k in o) d[k] = o[k]; } catch (e) {}
   return d;
 }
-function cqSave(c) { try { ls.set('d4:calc', JSON.stringify(c)); } catch (e) {} }
+function cqSave(c) { try { ls.set('pr:calc', JSON.stringify(c)); } catch (e) {} }
 function pow2(n) { var p = 1; while (p * 2 <= n) p *= 2; return n >= 1 ? p : 0; }
 // 전지 한 장에 몇 개: 그대로 · 돌려서 · 섞어서(남는 띠에 돌려 넣기). 책자는 접지 때문에 가로·세로 2의 거듭제곱 격자만
-function fitSheet(P, iw, ih, c, book) {
+function fitSheet(P, iw, ih, c, book, gn) {
   var uL = P.l - 2 * c.sd, uS = P.s - c.gr - c.sd, best = { n: 0 };
+  // 결 맞추기: r=0이면 세로(ih)가 전지 짧은 변 방향. 세로결 품목은 결이 그 방향인 전지에만
+  var okR = function (r) { if (!gn || !P.g) return true; var hOnS = r === 0; return gn === 'v' ? (hOnS ? P.g === 'S' : P.g === 'L') : (hOnS ? P.g === 'L' : P.g === 'S'); };
   if (iw <= 0 || ih <= 0 || uL <= 0 || uS <= 0) return best;
   var put = function (n, rects, desc) { if (n > best.n) best = { n: n, rects: rects, desc: desc }; };
   [[iw, ih], [ih, iw]].forEach(function (o, r) {
+    if (!okR(r)) return;
     var a = o[0], b = o[1], cols = Math.floor(uL / a), rows = Math.floor(uS / b);
     if (book) { cols = pow2(cols); rows = pow2(rows); }
     var rects = []; for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) rects.push([i * a, j * b, a, b, r]);
     put(cols * rows, rects, cols + '×' + rows + (r ? ' (돌려서)' : ''));
-    if (book) return;
+    if (book || (gn && P.g)) return;
     // 아래쪽 남는 띠에 돌려서 더 넣기
     for (var k = 0; k <= Math.floor(uS / b); k++) {
       var rem = uS - k * b, c1 = Math.floor(uL / a), c2 = Math.floor(uL / b), r2 = Math.floor(rem / a), n = k * c1 + c2 * r2;
@@ -151,8 +171,9 @@ function yeon(sheets) { return fmtN(sheets / 500, 2) + '연'; }
 function calcItem(fw, fh, c, book) {
   // 책자는 접어서 붙어 있는 쪽끼리 도련을 나눠 쓰므로 쪽마다 도련 한 번, 낱장·전개도는 사방 도련
   var bb = book ? +c.bl : 2 * c.bl, iw = fw + bb, ih = fh + bb;
-  return PAPERS.map(function (P) {
-    var f = fitSheet(P, iw, ih, c, book), use = f.n ? f.n * fw * fh / (P.s * P.l) : 0;
+  var gn = book ? 'v' : (c.gn || '');
+  return (gn ? PAPERS_G : PAPERS).map(function (P) {
+    var f = fitSheet(P, iw, ih, c, book, gn), use = f.n ? f.n * fw * fh / (P.s * P.l) : 0;
     return { P: P, f: f, n: f.n, use: use, loss: 1 - use };
   }).sort(function (a, b) { return (b.n ? 1 : 0) - (a.n ? 1 : 0) || a.loss - b.loss; });
 }
@@ -165,7 +186,7 @@ function resCard(r, i, extra, spec) {
 }
 var CQ = null;
 function renderCalc() {
-  var c = CQ = cq(), h = '';
+  var c = CQ = cq(), h = '<div class="phd"><b>절수</b><small>46전 788×1091 · 국전 636×939 · 결(종목/횡목) 반영</small></div>';
   h += '<div class="seg" id="cT">' + [['book', '책자'], ['sheet', '낱장'], ['pack', '전개도']].map(function (o) { return '<button data-t="' + o[0] + '" class="' + (c.t === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>';
   h += '<div class="seg" id="cM">' + [['size', '사이즈 → 추천'], ['cut', '절수 → 판형']].map(function (o) { return '<button data-m="' + o[0] + '" class="' + (c.m === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>';
   var num = function (k, lb, unit, step) { return '<div class="f"><label>' + lb + (unit ? ' (' + unit + ')' : '') + '</label><input type="number" inputmode="decimal" data-k="' + k + '" value="' + c[k] + '"' + (step ? ' step="' + step + '"' : '') + '></div>'; };
@@ -174,7 +195,8 @@ function renderCalc() {
     if (c.t !== 'pack') h += '<div class="chips cpre">' + PRESETS.map(function (p) { return '<button data-pw="' + p[1] + '" data-ph="' + p[2] + '" class="' + (+c.w === p[1] && +c.h === p[2] ? 'on' : '') + '">' + p[0] + '<small>' + p[1] + '×' + p[2] + '</small></button>'; }).join('') + '</div>';
     h += '<div class="frow">' + num(c.t === 'pack' ? 'cw' : 'w', '가로', 'mm') + num(c.t === 'pack' ? 'ch' : 'h', '세로', 'mm') + '</div>';
     if (c.t === 'book') h += '<div class="frow">' + num('p', '본문', '쪽') + num('q', '부수', '부') + '</div><div class="frow">' + num('sp', '책등', 'mm', '0.5') + num('fl', '날개', 'mm') + '</div>';
-    else h += '<div class="frow">' + num('q', '수량', '개') + num('ex', '여분', '%') + '</div>';
+    else h += '<div class="frow">' + num('q', '수량', '개') + num('ex', '여분', '%') + '</div><div class="seg" id="cG">' + [['', '결 상관없음'], ['v', '세로결'], ['h', '가로결']].map(function (o) { return '<button data-g="' + o[0] + '" class="' + ((c.gn || '') === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>';
+    if (c.t === 'book') h += '<div class="nt">책은 결이 책등과 같은 방향(세로결)으로 자동 계산해요 · 종목/횡목 따로 보여줘요</div>';
     h += '</div>';
   } else {
     h += '<div class="card"><div class="ct">전지 · 절수</div><div class="seg" id="cP">' + PAPERS.map(function (P) { return '<button data-pp="' + P.k + '" class="' + (c.paper === P.k ? 'on' : '') + '">' + P.n + ' ' + P.s + '×' + P.l + '</button>'; }).join('') + '</div>' +
@@ -230,11 +252,12 @@ function calcOut(c) {
 function bindCalc() {
   var c = CQ, upd = function (keepInputs) { cqSave(c); if (keepInputs) { $('#cRes').innerHTML = calcOut(c); bindRes(); } else { var y0 = window.scrollY; renderCalc(); window.scrollTo(0, y0); } };
   $$('#cT button').forEach(function (b) { b.onclick = function () { c.t = b.dataset.t; upd(); }; });
+  $$('#cG button').forEach(function (b) { b.onclick = function () { c.gn = b.dataset.g; upd(); }; });
   $$('#cM button').forEach(function (b) { b.onclick = function () { c.m = b.dataset.m; upd(); }; });
   $$('#cP button').forEach(function (b) { b.onclick = function () { c.paper = b.dataset.pp; upd(); }; });
   $$('[data-cut]').forEach(function (b) { b.onclick = function () { c.cut = +b.dataset.cut; upd(); }; });
   $$('.cpre [data-pw]').forEach(function (b) { b.onclick = function () { c.w = +b.dataset.pw; c.h = +b.dataset.ph; upd(); }; });
-  $$('[data-k]').forEach(function (i) { i.oninput = function () { c[i.dataset.k] = i.value === '' ? '' : +i.value; upd(true); }; });
+  $$('#main [data-k]').forEach(function (i) { i.oninput = function () { c[i.dataset.k] = i.value === '' ? '' : +i.value; upd(true); }; });
   bindRes();
   function bindRes() {
     $$('.cfit [data-pw]').forEach(function (b) { b.onclick = function () { c.w = +b.dataset.pw; c.h = +b.dataset.ph; c.m = 'size'; upd(); }; });
@@ -242,9 +265,9 @@ function bindCalc() {
   }
 }
 
-/* ───── SPEC 도우미 (2026.10.06) ─────
-   품목 고르면 → 늘 쓰는 스펙(지난 사양서 21개 기준) 채워짐 → 크기·책등·보드·싸개·전개·절수 자동 → 사양서 표로 복사
-   * 숫자 기준은 일반적인 업계 값. 인쇄소·박스업체 기준이 있으면 화면에서 바꾸고 '내 기본값으로 저장' */
+/* ───── PROOF 사양서 도우미 (2026.10.07) ─────
+   사양서(여러 품목을 행으로 모아 MASTER 양식으로 복사) · 대표 품목(늘 쓰는 스펙 + 자동 계산) · 전개도 · 절수(결 반영) · 자료(카탈로그)
+   * 숫자 기준은 일반적인 업계 값이에요. 인쇄소·박스업체 기준이 있으면 화면에서 바꾸고 '내 기본값으로 저장' */
 var $ = function (s) { return document.querySelector(s); }, $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
 var ls = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -253,131 +276,166 @@ function r1(v) { return Math.round(v * 10) / 10; }
 function r05(v) { return Math.round(v * 2) / 2; }
 function mm(v) { return (Math.round(v * 10) / 10).toString(); }
 function sz(w, h, d) { return mm(w) + '×' + mm(h) + (d != null ? '×' + mm(d) : '') + 'mm'; }
+function copyText(x, msg) { (navigator.clipboard ? navigator.clipboard.writeText(x) : Promise.reject()).then(function () { toast(msg || '복사했어요'); }, function () { var ta = document.createElement('textarea'); ta.value = x; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast(msg || '복사했어요'); } catch (e) {} ta.remove(); }); }
 
-/* 용지 두께 (㎛) — 와우프레스 제작가이드 표 (아트·스노우·모조) */
+/* ── 사양 카탈로그: Drive 'PROOF 사양 카탈로그' 시트가 원본 · 아래는 시트를 못 불러올 때 쓰는 기본값 ── */
+var CAT = {"COLORS": {"매직칼라": ["파스텔핑크", "올드로즈", "로즈버드", "포트와인", "비스킷베이지", "말차", "메도그린", "홀리그린", "카블스톤", "솜버그레이", "바솔트그레이", "다크나이트", "벚꽃", "분홍", "플라밍고핑크", "카멜리아로즈", "주홍", "스칼렛", "피", "코랄오렌지", "뉴주홍", "오렌지", "주황", "노른자", "썬플라워", "민들레", "노랑", "참외", "라임옐로우", "녹두", "라임", "풋사과", "연두", "초록", "솔잎", "뉴녹두", "진한녹", "파인그로브", "스모키그린", "뉴청록", "옥", "아주르블루", "연청", "폴라리스블루", "연녹청", "녹청", "파랑", "사이엔블루", "헤이그블루", "블루그로토", "리치네이비", "프러시안블루", "슬레이트블루", "헤일네이비", "연보라", "라일락", "라벤더", "그레이프", "와인", "다크플럼", "다크그레이프", "엑스트라화이트", "백", "연미", "크림", "뉴크림", "뉴계란", "굴", "뉴황갈", "황단", "올드커퍼", "로사베이지", "세피아브라운", "다크초콜렛", "뉴밤", "금발", "우유", "밍크", "모래", "회", "백옥", "시멘트", "차콜", "클래식블랙"]}, "P": [["일반지", "스노우지", "백색", 100, 95, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 120, 115, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 150, 150, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 180, 175, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 200, 190, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 250, 250, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "스노우지", "백색", 300, 300, "와우프레스", "", "포토카드·엽서·포스터·표지·싸개", "일반지는 제지사 비워두고 업체 선택"], ["일반지", "아트지", "백색", 100, 80, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 120, 100, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 150, 125, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 180, 155, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 200, 180, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 250, 230, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "아트지", "백색", 300, 285, "와우프레스", "", "포토북 내지·전단", ""], ["일반지", "백색 모조지", "백색", 80, 95, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 100, 115, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 120, 140, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 150, 175, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 180, 200, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 220, 245, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "백색 모조지", "백색", 260, 285, "와우프레스", "", "다이어리·메모패드 내지·봉투", "필기용 내지는 코팅 X"], ["일반지", "미색 모조지", "미색 (아이보리 톤)", 80, 95, "백색 모조 기준 참고", "", "소설·다이어리 내지", "눈 편한 미색"], ["일반지", "미색 모조지", "미색 (아이보리 톤)", 100, 115, "백색 모조 기준 참고", "", "소설·다이어리 내지", "눈 편한 미색"], ["일반지", "미색 모조지", "미색 (아이보리 톤)", 120, 140, "백색 모조 기준 참고", "", "소설·다이어리 내지", "눈 편한 미색"], ["고급지", "앙상블 E-Class", "백색", 90, 112, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 100, 125, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 110, 138, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 130, 162, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 160, 200, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 190, 238, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블 E-Class", "백색", 210, 262, "추정(평량×1.25)", "한솔제지", "캘린더·엽서·포토북 내지", ""], ["고급지", "앙상블", "백색", 230, 288, "추정(평량×1.25)", "한솔제지", "데스크 캘린더 본문", "230g 규격은 업체 재고 확인"], ["고급지", "아르떼", "울트라화이트(UW)", 105, 136, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 130, 169, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 160, 208, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 190, 247, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 210, 273, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 230, 299, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "울트라화이트(UW)", 310, 403, "추정(평량×1.3)", "한국제지", "엽서·아코디언·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 105, 136, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 130, 169, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 160, 208, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 190, 247, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 210, 273, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 230, 299, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "아르떼", "NW (내츄럴화이트)", 310, 403, "추정(평량×1.3)", "한국제지", "엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 90, 112, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 105, 131, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 130, 162, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 160, 200, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 190, 238, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 210, 262, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 240, 300, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "울트라화이트(UW)", 310, 388, "추정(평량×1.25)", "삼화제지", "티켓·엽서·표지", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 90, 112, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 105, 131, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 130, 162, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 160, 200, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 190, 238, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 210, 262, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 240, 300, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "랑데뷰", "NW (내츄럴)", 310, 388, "추정(평량×1.25)", "삼화제지", "티켓·엽서", ""], ["고급지", "M러프", "화이트", 90, 117, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 100, 130, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 130, 169, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 160, 208, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 190, 247, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 210, 273, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["고급지", "M러프", "화이트", 240, 312, "추정(평량×1.3)", "한솔제지", "표지·엽서", ""], ["색지", "매직칼라", "인스퍼 매직칼라 · 84색 (색 지정)", 120, "", "", "한솔제지", "면지·캘린더 받침대 배접·봉투", "색에 따라 다른 평량은 확인"], ["색지", "밍크", "삼화 기본 색지 (색 지정)", 80, "", "", "삼화제지", "면지·간지", "색상·평량은 삼화제지 스마트서치로 확인"], ["색지", "밍크", "삼화 기본 색지 (색 지정)", 120, "", "", "삼화제지", "면지·간지", "색상·평량은 삼화제지 스마트서치로 확인"], ["색지", "삼원 칼라", "색번호 지정 (예: 청보라 69)", 120, "", "", "삼원페이퍼", "면지·봉투", ""], ["판지", "아이보리 (AB)", "백색 판지", 300, 420, "추정(평량×1.4)", "", "단상자·슬리브", "업체 선택"], ["판지", "아이보리 (AB)", "백색 판지", 350, 490, "추정(평량×1.4)", "", "단상자·슬리브", "업체 선택"], ["판지", "아이보리 (AB)", "백색 판지", 400, 560, "추정(평량×1.4)", "", "단상자·슬리브", "업체 선택"], ["판지", "로얄 아이보리 (BV)", "고백색 판지", 350, 490, "추정(평량×1.4)", "", "슬리브·단상자·고급 케이스", "업체 선택"], ["판지", "로얄 아이보리 (BV)", "고백색 판지", 400, 560, "추정(평량×1.4)", "", "슬리브·단상자·고급 케이스", "업체 선택"], ["판지", "로얄 아이보리 (BV)", "고백색 판지", 450, 630, "추정(평량×1.4)", "", "슬리브·단상자·고급 케이스", "업체 선택"], ["판지", "BW", "백판지(뒷면 회색)", 300, 420, "추정(평량×1.4)", "", "L홀더·엽서·대지", "업체 선택"], ["판지", "BW", "백판지(뒷면 회색)", 350, 490, "추정(평량×1.4)", "", "L홀더·엽서·대지", "업체 선택"], ["판지", "BW", "백판지(뒷면 회색)", 400, 560, "추정(평량×1.4)", "", "L홀더·엽서·대지", "업체 선택"], ["판지", "MGB", "마닐라 판지", 350, 490, "추정(평량×1.4)", "", "인서트·트레이", "업체 선택"], ["판지", "CCP", "코트 판지 (뒷면 회색)", 300, 420, "추정(평량×1.4)", "", "저가 패키지·인서트", "업체 선택"], ["판지", "CCP", "코트 판지 (뒷면 회색)", 350, 490, "추정(평량×1.4)", "", "저가 패키지·인서트", "업체 선택"], ["판지", "CCP", "코트 판지 (뒷면 회색)", 400, 560, "추정(평량×1.4)", "", "저가 패키지·인서트", "업체 선택"], ["판지", "갱판지", "회색 보드 (두께로 주문)", 1000, 1700, "업체 일반값", "", "싸바리·하드커버 보드·캘린더 받침대", "1200g ≈ 2mm, 업체마다 1.5/2/2.5mm로도 주문"], ["판지", "갱판지", "회색 보드 (두께로 주문)", 1200, 2000, "업체 일반값", "", "싸바리·하드커버 보드·캘린더 받침대", "1200g ≈ 2mm, 업체마다 1.5/2/2.5mm로도 주문"], ["골판지", "E골 골판지", "양면 (표면지 합지)", "", 1500, "유패키지", "", "시즌그리팅 아웃박스", "골 높이 약 1.5mm"], ["골판지", "G골 골판지", "양면 (표면지 합지)", "", 600, "업체 일반값", "", "얇은 아웃박스", "E골보다 얇음 · 업체 확인"], ["골판지", "B골 골판지", "양면", "", 3000, "유패키지", "", "택배·대형 박스", ""], ["스티커", "아트지 스티커", "백색 이형지", 90, "", "", "", "판 스티커·라벨", "앞면 인쇄만 (4/0)"], ["스티커", "리무버블 아트 스티커", "재접착", 90, "", "", "", "다이어리 스티커", ""], ["스티커", "유포지 스티커", "방수", 80, "", "", "", "방수 라벨", ""], ["스티커", "PET 스티커", "투명/은무", "", 100, "두께 표기", "", "투명 스티커", "UV 인쇄 + White"], ["특수", "유포지", "합성지", "", 250, "두께 표기", "", "4컷·방수", ""], ["특수", "PET", "투명 필름", "", 200, "두께 표기", "", "슬리브·창", "0.2T / 0.4T"], ["특수", "PVC", "카드", "", 760, "두께 표기", "", "PVC 카드", "0.76T"], ["특수", "유광 인화지", "사진", "", "", "", "", "인화사진", "컬러 인화 (옵셋 아님)"]], "PRINT": [["옵셋", "4/4", "옵셋 4/4 (CMYK/CMYK)", "양면 컬러"], ["옵셋", "4/0", "옵셋 4/0 (CMYK/0)", "단면 컬러"], ["옵셋", "4/1", "옵셋 4/1 (CMYK/K)", "뒷면 먹 1도"], ["옵셋", "5/5", "옵셋 5/5 (CMYK+별색1/CMYK+별색1)", "별색 Pantone 번호 기재"], ["옵셋", "5/0", "옵셋 5/0 (CMYK+별색1/0)", ""], ["옵셋", "1/1", "옵셋 1/1 (K/K)", ""], ["옵셋", "2/2", "옵셋 2/2 (별색2/별색2)", ""], ["UV 인쇄", "4/0", "UV 4/0 (CMYK/0)", "PET·PVC·아크릴"], ["UV 인쇄", "5/0", "UV 5/0 (CMYK+White/0)", "투명 소재 화이트 깔기"], ["실크 인쇄", "1/0", "실크 1/0 (별색1)", "알판·패브릭·색지 위 화이트"], ["실크 인쇄", "3/0", "실크 3/0", ""], ["그라비아", "4/0", "그라비아 4/0", "마스킹테이프·필름 대량"], ["디지털 인쇄", "4/4", "디지털 4/4 (CMYK/CMYK)", "소량·샘플"], ["인화", "컬러", "컬러 인화", "인화사진"]], "FOIL": [["금박", "유광 금박", "유광 금박", ""], ["금박", "무광 금박", "무광 금박", ""], ["은박", "유광 은박", "유광 은박", ""], ["은박", "무광 은박", "무광 은박 (태창 은무광 120)", "지난 사양서 사용"], ["컬러박", "유광 컬러박", "유광 컬러박 (색 지정)", "적·청·흑·백·핑크 등"], ["컬러박", "무광 컬러박", "무광 컬러박 (색 지정)", ""], ["컬러박", "로즈골드박", "로즈골드박", ""], ["컬러박", "동박", "동박 (브론즈)", ""], ["홀로그램박", "투명 홀로그램박", "투명 홀로그램박 (태창 028T)", "지난 사양서 사용"], ["홀로그램박", "은 홀로그램박", "은 홀로그램박", ""], ["홀로그램박", "홀로 진녹", "홀로그램박 (BB-01 홀로진녹)", "지난 사양서 사용"], ["홀로그램박", "홀로 중청", "홀로그램박 (BB-03 홀로중청)", "지난 사양서 사용"], ["특수박", "펄박", "펄박", ""], ["특수박", "안료박 (백색 등)", "안료박 (색 지정)", "어두운 종이 위 불투명"], ["특수박", "레인보우박", "레인보우박", ""], ["특수박", "스크래치박", "스크래치박", "복권식"], ["기타", "박 + 형압", "박 + 형압 (동시)", "박 위치에 형압 같이"]], "COAT": [["라미네이팅", "유광 라미", "단면 / 유광 라미", "필름 · 튼튼함"], ["라미네이팅", "무광 라미", "단면 / 무광 라미", ""], ["라미네이팅", "벨벳(스킨) 라미", "단면 / 벨벳 라미", "촉감 부드러움"], ["라미네이팅", "홀로그램 라미", "단면 / 홀로그램 라미", "패턴 지정"], ["라미네이팅", "엠보 라미", "단면 / 엠보 라미", ""], ["UV 코팅", "전면 유광 UV", "단면 / 전면 유광 UV코팅", ""], ["UV 코팅", "부분 UV", "부분 UV코팅 (영역 지정)", ""], ["실크 코팅", "부분 유광 실크", "부분 유광 실크 (영역 지정)", "사진·로고 강조"], ["실크 코팅", "모래알(샌드) 실크", "모래알 실크 (영역 지정)", "까칠한 질감"], ["실크 코팅", "에칭 실크", "에칭 (영역 지정)", "무광 위 유광 패턴"], ["실크 코팅", "글리터 실크", "글리터 실크 (영역 지정)", ""], ["인쇄코팅", "기계 코팅", "양면 / 기계 코팅", "인쇄기에서 바니쉬 · 저렴"], ["인쇄코팅", "유광 바니쉬", "양면 / 유광 바니쉬", ""], ["인쇄코팅", "무광 바니쉬", "양면 / 무광 바니쉬", ""], ["인쇄코팅", "인쇄 코팅 70%", "양면 / 인쇄 코팅 (70%)", "지난 사양서 사용"], ["코팅", "유광 코팅", "양면 / 유광 코팅", "포토카드 기본"], ["코팅", "무광 코팅", "양면 / 무광 코팅", "엽서·표지 기본"], ["코팅", "없음", "-", "모조지 필기 면은 코팅 X"]], "POST": [["형압", "양각 (엠보)", "형압 (양각) · 영역 지정", ""], ["형압", "음각 (디보싱)", "형압 (음각) · 영역 지정", ""], ["형압", "박 + 형압", "박 + 형압 (동시)", ""], ["에폭시", "전면 에폭시", "전면 에폭시", "커버 가격방어용"], ["에폭시", "부분 에폭시", "부분 에폭시 (영역 지정)", ""], ["재단·톰슨", "재단", "재단", ""], ["재단·톰슨", "완칼", "톰슨 (완칼)", "목형 필요"], ["재단·톰슨", "반칼", "톰슨 (반칼)", "스티커"], ["재단·톰슨", "귀도리", "모서리 라운딩 3R", "1R·3R·4R"], ["재단·톰슨", "레이저 커팅", "레이저 커팅", "소량·정밀"], ["칼선", "부식칼 (톱니)", "부식칼 (톱니)", "티켓 끝"], ["칼선", "지네발", "지네발 칼선", "뜯는 선"], ["칼선", "미싱", "미싱선 (n줄)", "뜯는 선"], ["칼선", "오시", "오시 (n줄)", "접는 선 · 판지는 필수"], ["칼선", "누름선", "누름선 (n줄)", ""], ["타공", "원형 타공", "타공 (지름 mm)", ""], ["타공", "트윈링 타공", "타공 (트윈링 규격 맞춤)", ""], ["타공", "하도메", "하도메 타공 + 하도메", ""], ["타공", "걸이 타공", "걸이용 타공", "벽걸이 캘린더"], ["접지", "2단 접지", "2단 접지", ""], ["접지", "3단 접지", "3단 접지", ""], ["접지", "Z 접지", "Z 접지", ""], ["접지", "대문 접지", "대문 접지", ""], ["접지", "십자 접지", "십자 접지 (4단)", "포스터"], ["접지", "병풍 접지", "병풍 접지 (n단)", "아코디언"], ["특수 인쇄", "시온 잉크", "시온 잉크 (색 지정)", "온도 반응"], ["특수 인쇄", "축광 잉크", "축광 잉크", ""], ["특수 인쇄", "형광 별색", "형광 별색 (Pantone 801~)", ""], ["조립", "합지", "합지", ""], ["조립", "배접", "배접", ""], ["조립", "싸바리", "싸바리", ""], ["조립", "접착", "접착", ""], ["조립", "조립", "조립", ""]], "BIND": [["중철", "중철", "중철 제본", "4p 배수 · 64p 이하 권장"], ["중철", "상단 중철", "상단 중철 (2방)", "벽걸이 캘린더"], ["무선", "무선", "무선 제본", "저렴 · 잘 안 펴짐"], ["무선", "PUR 무선", "PUR 무선제본", "잘 펴짐 · 다이어리·포토북 기본"], ["사철", "사철", "사철 제본", "실로 엮음 · 180° 펴짐"], ["사철", "노출 사철 (누드)", "노출 사철 제본", "책등 실 노출 · 커버 없음"], ["양장", "각양장", "양장 (각양장) · 사철", "책등 평평"], ["양장", "환양장 (둥근 양장)", "양장 (환양장) · 사철", "책등 둥글게"], ["양장", "노출 양장", "노출 양장", "책등 노출"], ["양장", "반양장", "반양장", "소프트 커버 + 날개"], ["링", "트윈링", "트윈링 (색·코수·지름)", "캘린더·다이어리"], ["링", "상철 트윈링", "상철 트윈링 (화이트)", "데스크 캘린더"], ["링", "스프링", "스프링 제본", ""], ["링", "6공 링", "6공 링 바인더", ""], ["기타", "떡제본", "떡제본 (상단)", "메모패드"], ["기타", "실 제본 (미싱)", "실 제본", "얇은 책"]], "PART": [["헤드밴드", "헤드밴드", "헤드밴드 (색 지정)", "양장 책등 위아래"], ["가름끈", "가름끈", "가름끈 (폭 3mm · 색 지정 · 1~2줄)", "양장·다이어리"], ["고무밴드", "고무밴드", "고무밴드 (지름 2mm × 길이 · Pantone)", "다이어리 하드커버"], ["링", "트윈링", "트윈링 (화이트) · 코수·지름 지정", "12mm·14mm 등"], ["면지", "면지", "면지 (매직칼라 120 등)", "양장 앞뒤"], ["자석", "마그넷", "마그넷 부착", "자석 박스"], ["하도메", "하도메", "하도메 + 와셔", ""]], "PACK": [["OPP", "접착형 OPP", "접착형 OPP 개별 포장", ""], ["OPP", "비접착 OPP", "비접착 OPP", ""], ["수축", "수축포장", "완제품 수축포장", ""], ["수축", "수축 + 라벨", "수축포장 + 원형 라벨", ""], ["케이스", "PET 박스", "PET 박스 + 투명 원형 스티커", ""], ["봉투", "PVC 지퍼백", "PVC 슬라이드 지퍼백", ""], ["기타", "n종 정합", "n종 정합 (1세트)", "종 수 꼭 맞추기"], ["기타", "벌크", "벌크 납품", ""]], "SHEET": [["46전지", "788×1091", "책·포스터 (46판 계열)"], ["국전지", "636×939", "책·엽서 (국판 계열)"], ["46 2절", "545×788", ""], ["국 2절", "469×636", ""], ["46 4절", "394×545", ""], ["국 4절", "318×469", ""]], "SIZES": [["A4", "210×297"], ["A5", "148×210"], ["A6", "105×148"], ["B5", "182×257"], ["국판", "148×210"], ["신국판", "152×225"], ["46판", "128×188"], ["포토카드", "55×85"], ["엽서", "100×150"], ["4컷 1줄", "51×152"], ["4컷 2줄", "102×152"], ["증명사진", "35×45"], ["포스터 (A2)", "420×594"], ["포스터 (46 4절)", "394×545"]], "FIX": [["오타", "SKZ", "쌍작 보드 / 얆은 솜 / 메세지 카드", "상짝 보드 / 얇은 솜 / 메시지 카드"], ["오타", "채종협·정해인·니쥬 (20260818 시트)", "맞췀", "맞춤"], ["오타", "이준호 팬키트", "내경에 맞춥 / 멤버쉽", "맞춤 / 멤버십"], ["오타", "채종협·정해인", "키링 마운드", "마운트"], ["오타", "보아·휘인 플브", "레스터파일", "래스터파일"], ["오타", "휘인 플브", "가사지 55x86", "55x85"], ["오타", "전 파일", "버젼", "버전"], ["표기 통일", "전 파일", "무광코팅 / 무광 라미 혼용", "코팅과 라미 구분 → 코팅 탭 표준 표기"], ["표기 통일", "전 파일", "PUR제본 / PUR 무선 제본 등 4가지", "PUR 무선제본"], ["표기 통일", "전 파일", "모조 / 모조지 / 백모조 / 백색 모조", "백색 모조지"], ["표기 통일", "전 파일", "귀도리 / 모서리 톰슨 / 모퉁이 톰슨", "모서리 라운딩 3R"], ["표기 통일", "온앤오프 미니앨범", "앙상블E / 앙상블E클래스", "앙상블 E-Class (한솔제지)"], ["표기 통일", "MASTER·온앤오프·GD", "028T 박 표기 3가지", "투명 홀로그램박 (태창 028T) · 박 칸에"], ["표기 통일", "온앤오프·휘인·김선호 vs 나머지", "갱판지 1,000g / 1200g", "업체에 두께(mm)로 확인 후 통일"], ["도수 불일치", "20260818 시트 (4개 파일)", "아코디언 엽서 봉투 4/0인데 CMYK/CMYK", "4/0 (CMYK/0) 또는 4/4로 통일"], ["도수 불일치", "니쥬 20260929", "겉·속합지 4/0인데 CMYK/CMYK, 캘린더 내지 5/4", "도수·방식 맞추기"], ["도수 불일치", "피원 20260907", "슬리브 5/4인데 CMYK+별색1/0", "5/0 또는 방식 수정"], ["도수 불일치", "SKZ", "라벨 스티커 4/0인데 CMYK/CMYK", "4/0 (CMYK/0)"], ["도수 불일치", "정은지", "인화사진 옵셋 4/0", "컬러 인화"], ["스티커 양면", "칼퇴하자", "아트지 스티커 옵셋 4/4", "4/0 (뒷면 이형지)"], ["모조지 코팅", "온앤오프 시즌그리팅", "메모패드 모조 100 양면 기계코팅 (4/0)", "코팅 없음"], ["모조지 코팅", "피원", "다이어리 모조 120·여권 모조 80 양면 기계코팅", "필기면 코팅 없음"], ["모조지 코팅", "20260818 시트", "다이어리 내지 모조 150 양면 기계코팅", "코팅 없음"], ["모조지 코팅", "SKZ", "스케줄러 백모조 120 양면 인쇄코팅", "코팅 없음"], ["모조지 코팅", "휘인 플브 수정안", "가사지 모조 120 양면 유광 라미", "라미 필요하면 스노우로"], ["수량·쪽수", "20260818 시트", "다이어리 72장 / 104p", "72장이면 144p"], ["수량·쪽수", "20260818 시트", "폴라로이드 4종인데 8장/16p, 인화사진 4장/8p", "종 수·장수 맞추기 / 인화는 단면 4장"], ["수량·쪽수", "정은지", "포스터 4매(10p)", "8p"], ["수량·쪽수", "피원·SKZ·니쥬", "기타 칸 4종 정합(1세트) 남음", "실제 종 수로"], ["수량·쪽수", "니쥬", "트윈링 25코 / 26코 혼재", "하나로"], ["수량·쪽수", "칼퇴하자", "디지팩 115×115인데 028T 박 140×200", "박 사이즈 수정"], ["수량·쪽수", "피원·20260818 시트", "월 캘린더 중철인데 트윈링 규격 타공", "걸이용 타공"], ["제지사 미기재", "전 파일", "앙상블·아르떼·랑데뷰·BV 등 고급지 제지사 없음", "용지 탭의 제지·유통사 사용 (앙상블=한솔, 아르떼=한국제지, 랑데뷰=삼화제지)"], ["커버 가격방어", "온앤오프·피원·니쥬", "아웃박스·슬리브·겉합지 후가공 \"-\"", "가장 비싼 후가공 전면 사이즈로"], ["커버 가격방어", "SKZ", "무광 은박 사이즈 없음", "사이즈 기재"]]};
+try { var _c = JSON.parse(localStorage.getItem('pr:cat') || 'null'); if (_c && _c.P && _c.P.length) { _c.FIX = CAT.FIX; _c.COLORS = CAT.COLORS; _c.SHEET = CAT.SHEET; _c.SIZES = CAT.SIZES; CAT = _c; } } catch (e) {}
+function paperLabel(r, color) { var g = r[3] ? r[3] + 'g' : '', code = (String(r[2]).match(/\b(UW|NW)\b/) || [])[1]; return r[1] + (code ? ' ' + code : '') + (color ? ' ' + color : '') + (g ? ' / ' + g : '') + (r[6] ? ' (' + r[6] + ')' : ''); }
+var FIN_GRP = ['형압', '에폭시', '특수 인쇄'];
+function finList() { return (CAT.FOIL || []).map(function (r) { return r[2]; }).concat((CAT.POST || []).filter(function (r) { return FIN_GRP.indexOf(r[0]) >= 0; }).map(function (r) { return r[2]; })).concat((CAT.COAT || []).filter(function (r) { return r[0] === '실크 코팅'; }).map(function (r) { return r[2]; })); }
+function cutList() { return (CAT.POST || []).filter(function (r) { return FIN_GRP.indexOf(r[0]) < 0; }).map(function (r) { return r[2]; }); }
+function fillLists() {
+  var o = function (a) { return a.map(function (p) { return '<option value="' + esc(p) + '">'; }).join(''); }, col = function (k) { return (CAT[k] || []).map(function (r) { return r[2]; }); };
+  var cols = (CAT.COLORS || {})['매직칼라'] || [], mc = CAT.P.filter(function (r) { return r[1] === '매직칼라'; });
+  $('#dl-paper').innerHTML = o(CAT.P.map(function (r) { return paperLabel(r); }).concat([].concat.apply([], mc.map(function (r) { return cols.map(function (c) { return paperLabel(r, c); }); })))); $('#dl-print').innerHTML = o(col('PRINT')); $('#dl-coat').innerHTML = o(col('COAT'));
+  $('#dl-fin').innerHTML = o(finList()); $('#dl-cut').innerHTML = o(cutList()); $('#dl-bind').innerHTML = o(col('BIND').concat(col('PART'))); $('#dl-pack').innerHTML = o(col('PACK'));
+}
+function loadCat() {
+  gas('appProofCatalog').then(function (d) {
+    if (d && d.P && d.P.length) { d.FIX = CAT.FIX; d.COLORS = CAT.COLORS; d.SHEET = CAT.SHEET; d.SIZES = CAT.SIZES; CAT = d; ls.set('pr:cat', JSON.stringify(d)); fillLists(); if (S.view === 'ref') renderRef(); }
+  }).catch(function () {});
+}
+
+/* 용지 두께 (㎛) — 스노우·아트·모조는 와우프레스 표, 나머지는 카탈로그 (추정 포함) */
 var THICK = {
   '스노우': { 100: 95, 120: 115, 150: 150, 180: 175, 200: 190, 250: 250, 300: 300 },
   '아트': { 100: 80, 120: 100, 150: 125, 180: 155, 200: 180, 250: 230, 300: 285 },
   '모조': { 80: 95, 100: 115, 120: 140, 150: 175, 180: 200, 220: 245, 260: 285 }
 };
-// '스노우 / 120g' 같은 글에서 두께(mm) 추정. 표에 없으면 null
 function thickOf(paper) {
   var s = String(paper || ''), g = (s.match(/(\d{2,4})\s*g/) || [])[1], k = /스노우/.test(s) ? '스노우' : /아트지|아트 /.test(s + ' ') && !/스티커/.test(s) ? '아트' : /모조/.test(s) ? '모조' : '';
+  if (!k && g) { var hit = CAT.P.filter(function (r) { return r[4] && +r[3] === +g && s.indexOf(r[1].split(' ')[0]) >= 0; })[0]; if (hit) return hit[4] / 1000; }
   if (!k || !g) return null; var T = THICK[k], gs = Object.keys(T).map(Number).sort(function (a, b) { return a - b; });
   g = +g; if (T[g]) return T[g] / 1000;
   var lo = gs.filter(function (x) { return x < g; }).pop(), hi = gs.filter(function (x) { return x > g; })[0];
   if (lo && hi) return (T[lo] + (T[hi] - T[lo]) * (g - lo) / (hi - lo)) / 1000;
   return null;
 }
-var PAPER_LIST = ['스노우 / 120g', '스노우 / 150g', '스노우 / 180g', '스노우 / 250g', '스노우 / 300g', '아트 / 120g', '아트 / 300g', '모조 / 100g', '모조 / 120g', '모조 / 200g',
-  '앙상블 / 230g', '아르떼 / 210g', '아르떼 UW / 310g', '랑데뷰 / 240g', 'AB(아이보리) / 350g', 'BV(로얄아이보리) / 450g', '로얄 아이보리 / 400g',
-  '아트 스티커 / 90g', '리무버블 아트 스티커 / 90g', '한솔 매직칼라 / 120g', '갱판지 / 1200g', 'E골 백색 골판지', 'G골 골판지'];
 
-/* ── 절수 계산: CALC 탭 코드(calc.js)의 fitSheet 사용 ── */
+/* ── 절수: 결 방향 반영 ──
+   gn: '' 상관없음 · 'v' 결이 세로(높이)와 평행 · 'h' 결이 가로와 평행 */
 var MAR = { bl: 3, gr: 10, sd: 5 };
-function bestSheet(w, h, book) {
-  var bb = book ? MAR.bl : 2 * MAR.bl;
-  return PAPERS.map(function (P) { var f = fitSheet(P, w + bb, h + bb, MAR, book); return { P: P, n: f.n, loss: f.n ? 1 - f.n * w * h / (P.s * P.l) : 1 }; })
-    .filter(function (r) { return r.n; }).sort(function (a, b) { return a.loss - b.loss; })[0] || null;
+var GN_LB = { '': '결 상관없음', v: '세로결', h: '가로결' };
+function bestSheet(w, h, book, gn) {
+  var bb = book ? MAR.bl : 2 * MAR.bl, c = { bl: MAR.bl, gr: MAR.gr, sd: MAR.sd, gn: book ? 'v' : (gn || '') };
+  return calcItem(w, h, c, book)[0] || null;
 }
 
-/* ── 품목 템플릿: 지난 사양서에서 가장 많이 쓴 값 ── */
-// 행 필드: cat(대분류) set(구성) item(품목) size paper qty print way coat post bind pack
+/* ── 대표 품목 템플릿: 지난 사양서에서 많이 쓴 값 (용지 표기는 카탈로그와 같게) ──
+   행 필드: set(소분류) item(세부 품목) size pg(페이지·장수) paper print coat fin(특수가공) cut(톰슨·접지·가공) bind(제본) pack etc / flat=[w,h,장수] book=[w,h,쪽수] gn=결 */
+var D = function (paper, print, coat, fin, cut, bind, pack) { return { paper: paper, print: print, coat: coat || '-', fin: fin || '-', cut: cut || '', bind: bind || '-', pack: pack || '' }; };
+var P44 = '옵셋 4/4 (CMYK/CMYK)', P40 = '옵셋 4/0 (CMYK/0)', P41 = '옵셋 4/1 (CMYK/K)';
+function card1(n, w, h, d, extra) { return { id: extra.id, g: '지류', n: n, in: { w: w, h: h, q: extra.q || 1000, k: 1 }, note: extra.note,
+  rows: function (v) { return [{ item: n, size: sz(v.w, v.h), pg: extra.pg || '1장 / 2p', flat: [v.w, v.h, 1], gn: extra.gn || '' }]; }, def: [d] }; }
 var T = [
-  { id: 'pc', g: '지류', n: '포토카드', in: { w: 55, h: 85, q: 1000, k: 1 },
-    rows: function (v) { return [{ item: '포토카드', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단 / 귀도리 (모서리 3R)', pack: '' }] },
-  { id: 'pt', g: '지류', n: '엽서', in: { w: 100, h: 150, q: 1000, k: 1 },
-    rows: function (v) { return [{ item: '엽서', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 코팅', post: '-', bind: '재단', pack: '' }] },
-  { id: 'env', g: '지류', n: '엽서 봉투', in: { w: 100, h: 150, q: 1000, k: 1, mg: 4, fl: 15, lid: 35 }, note: '내용물 크기를 넣으면 봉투 크기 · 대략 전개를 계산해요 (정확한 건 목형 도면)',
-    calc: function (v) { var W = v.w + 2 * v.mg, H = v.h + 2 * v.mg; return [['봉투 완성', sz(W, H)], ['대략 전개 (옆날개 ' + v.fl + ' · 뚜껑 ' + v.lid + ')', sz(W + 2 * v.fl, 2 * H + v.lid)]]; },
-    rows: function (v) { var W = v.w + 2 * v.mg, H = v.h + 2 * v.mg; return [{ item: '엽서 봉투', size: sz(W, H) + ' (전개 ' + sz(W + 2 * v.fl, 2 * H + v.lid) + ')', qty: '1장', flat: [W + 2 * v.fl, 2 * H + v.lid, 1] }]; },
-    def: [{ paper: '모조지 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '-', post: '-', bind: '톰슨 / 오시 / 접착', pack: '' }] },
-  { id: 'ps', g: '지류', n: '포스터', in: { w: 400, h: 574, q: 500, k: 1 },
-    rows: function (v) { return [{ item: '포스터', size: sz(v.w, v.h), qty: '1장 / 1p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 150g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '-', post: '-', bind: '재단 (지관 포장 시 말기 / 접지 시 십자 접지)', pack: '' }] },
-  { id: 'f4a', g: '지류', n: '4컷 포토 (1줄)', in: { w: 51, h: 152, q: 1000, k: 1 },
-    rows: function (v) { return [{ item: '4컷 포토 (1줄)', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단', pack: '' }] },
-  { id: 'f4b', g: '지류', n: '4컷 포토 (2줄)', in: { w: 102, h: 152, q: 1000, k: 1 },
-    rows: function (v) { return [{ item: '4컷 포토 (2줄)', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단', pack: '' }] },
-  { id: 'tk', g: '지류', n: '티켓', in: { w: 70, h: 140, q: 1000, k: 1 },
-    rows: function (v) { return [{ item: '티켓', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 코팅', post: '미싱선 (1줄)', bind: '톰슨', pack: '' }] },
-  { id: 'st', g: '지류', n: '판 스티커', in: { w: 70, h: 100, q: 1000, k: 1 }, note: '스티커 + 대지(뒷판) 2행으로 나와요',
-    rows: function (v) { return [{ set: '스티커', item: '판 스티커', size: sz(v.w, v.h) + ' / 1p', qty: '1장', flat: [v.w, v.h, 1] }, { set: '대지', item: '판 스티커 대지', size: sz(v.w, v.h) + ' / 2p', qty: '1장', flat: [v.w, v.h, 1] }]; },
-    def: [{ paper: '아트 스티커 / 90g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '전면 / 무광 코팅', post: '-', bind: '톰슨 (반칼 · 목형)', pack: '' },
-      { paper: '스노우지 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 라미', post: '-', bind: '재단', pack: '' }] },
-  { id: 'acc', g: '지류', n: '아코디언 북', in: { w: 110, h: 110, n: 8, q: 500, k: 1 }, note: '한 면 크기 × 단수 = 펼침 크기 · 오시는 단수 −1줄',
-    calc: function (v) { var W = v.w * v.n, warn = W > 1091 - 2 * MAR.sd ? ' · 46전 긴 변보다 길어서 이어 붙여야 해요' : ''; return [['펼침 크기', sz(W, v.h) + warn], ['오시 · 접지', (v.n - 1) + '줄 / ' + v.n + '단 병풍접지']]; },
-    rows: function (v) { return [{ item: '아코디언 북', size: sz(v.w, v.h) + ' (펼침면 ' + sz(v.w * v.n, v.h) + ')', qty: '1장 / ' + v.n * 2 + 'p', flat: [v.w * v.n, v.h, 1], bindAuto: '오시 ' + (v.n - 1) + '줄 / ' + v.n + '단 병풍접지' }]; },
-    def: [{ paper: '스노우 / 250g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 기계 코팅', post: '-', bind: '', pack: '' }] },
-  { id: 'bk', g: '책자', n: '책자 (무선·PUR)', in: { w: 148, h: 210, p: 64, q: 500, k: 1, ti: 0, tc: 0 }, note: '책등 = 본문 장수(쪽수÷2) × 본문 두께 + 표지 두께 × 2 · 0.5mm 단위로 반올림',
-    calc: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [['책등', s.txt], ['표지 펼침', sz(2 * v.w + s.mm, v.h) + ' (앞뒤 + 책등)']]; },
-    rows: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [{ set: '표지', item: '표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm, v.h) + ', 책등 ' + mm(s.mm) + 'mm)', qty: '1장 / 4p', flat: [2 * v.w + s.mm, v.h, 1] },
-      { set: '본문', item: '본문', size: sz(v.w, v.h), qty: v.p + 'p', book: [v.w, v.h, v.p] }]; },
-    def: [{ paper: '스노우 / 250g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: 'PUR 무선제본', pack: '' },
-      { paper: '모조 / 120g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: 'PUR 무선제본', pack: '' }] },
-  { id: 'jc', g: '책자', n: '책자 (중철)', in: { w: 148, h: 210, p: 32, q: 500, k: 1 }, note: '중철은 4쪽 단위 · 책등 없음',
+  card1('포토카드', 55, 85, D('스노우지 / 300g', P44, '양면 / 유광 코팅', '-', '재단 / 모서리 라운딩 3R', '-', '접착형 OPP 개별 포장'), { id: 'pc' }),
+  card1('폴라로이드 포토카드', 55, 85, D('스노우지 / 300g', P44, '양면 / 무광 코팅', '부분 유광 실크 (영역 지정)', '재단 / 모서리 라운딩 3R', '-', '접착형 OPP 개별 포장'), { id: 'pol', note: '사진 영역만 부분 유광 실크' }),
+  card1('증명사진', 35, 45, D('스노우지 / 300g', P41, '단면 / 유광 라미', '-', '재단'), { id: 'idp', pg: '1장 / 2p' }),
+  card1('엽서', 100, 150, D('스노우지 / 300g', P44, '양면 / 무광 코팅', '-', '재단'), { id: 'pt' }),
+  card1('메시지 카드', 100, 150, D('아르떼 UW / 210g (한국제지)', P44, '-', '-', '재단'), { id: 'msg', note: '고급지는 코팅 없이 질감 살리기' }),
+  card1('포스터', 400, 574, D('스노우지 / 150g', P40, '-', '-', '십자 접지 (4단)'), { id: 'ps', q: 500, pg: '1장 / 1p' }),
+  card1('4컷 포토 (1줄)', 51, 152, D('스노우지 / 300g', P44, '양면 / 유광 코팅', '-', '재단'), { id: 'f4a' }),
+  card1('4컷 포토 (2줄)', 102, 152, D('스노우지 / 300g', P44, '양면 / 유광 코팅', '-', '재단'), { id: 'f4b' }),
+  card1('티켓', 70, 140, D('스노우지 / 300g', P44, '양면 / 무광 코팅', '-', '부식칼 (톱니) / 미싱선 (1줄)'), { id: 'tk' }),
+  card1('톰슨 스티커', 100, 150, D('아트지 스티커 / 90g', P40, '단면 / 무광 라미', '-', '톰슨 (반칼)'), { id: 'tst', pg: '1장 / 1p', note: '모양 따라 반칼 · 낱개로 떼면 완칼 · 목형 필요' }),
+  { id: 'st', g: '지류', n: '판 스티커 (+ 대지)', in: { w: 70, h: 100, q: 1000, k: 1 }, note: '스티커 + 대지(뒷판) 2행',
+    rows: function (v) { return [{ set: '스티커', item: '판 스티커', size: sz(v.w, v.h), pg: '1장 / 1p', flat: [v.w, v.h, 1] }, { set: '대지', item: '판 스티커 대지', size: sz(v.w, v.h), pg: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [D('아트지 스티커 / 90g', P40, '단면 / 무광 라미', '-', '톰슨 (반칼)'), D('스노우지 / 300g', P44, '양면 / 무광 코팅', '-', '재단')] },
+  { id: 'env', g: '지류', n: '엽서 봉투', in: { w: 100, h: 150, q: 1000, k: 1, mg: 4, fl: 15, lid: 35 }, note: '내용물 크기 기준 · 정확한 건 목형 도면',
+    calc: function (v) { var G = dieGeom('env', v); return [['봉투 완성', sz(v.w + 2 * v.mg, v.h + 2 * v.mg)], ['대략 전개', sz(G.W, G.H)]]; },
+    rows: function (v) { var G = dieGeom('env', v); return [{ item: '엽서 봉투', size: sz(v.w + 2 * v.mg, v.h + 2 * v.mg) + ' (전개 ' + sz(G.W, G.H) + ')', pg: '1장', flat: [G.W, G.H, 1], die: 'env' }]; },
+    def: [D('백색 모조지 / 120g', P40, '-', '-', '톰슨 / 오시 / 접착')] },
+  { id: 'acc', g: '지류', n: '아코디언 북', in: { w: 110, h: 110, n: 8, q: 500, k: 1 }, note: '한 면 × 단수 = 펼침 · 오시 단수 −1줄 · 결은 접는 선과 같은 방향(세로)',
+    calc: function (v) { var W = v.w * v.n; return [['펼침 크기', sz(W, v.h) + (W > 1091 - 2 * MAR.sd ? ' · 46전보다 길어서 이어 붙여야 해요' : '')], ['오시 · 접지', (v.n - 1) + '줄 / ' + v.n + '단 병풍 접지']]; },
+    rows: function (v) { return [{ item: '아코디언 북', size: sz(v.w, v.h) + ' (펼침 ' + sz(v.w * v.n, v.h) + ')', pg: '1장 / ' + v.n * 2 + 'p', flat: [v.w * v.n, v.h, 1], gn: 'v', cutAuto: '오시 ' + (v.n - 1) + '줄 / 병풍 접지 (' + v.n + '단)' }]; },
+    def: [D('아르떼 UW / 190g (한국제지)', P44, '양면 / 기계 코팅', '-', '')] },
+  { id: 'memo', g: '지류', n: '메모패드', in: { w: 90, h: 120, n: 50, q: 500, k: 1 }, note: '모조지 필기면은 코팅하지 않아요',
+    rows: function (v) { return [{ item: '메모패드', size: sz(v.w, v.h), pg: v.n + '매', flat: [v.w, v.h, v.n] }]; }, def: [D('백색 모조지 / 100g', P40, '-', '-', '재단', '떡제본 (상단)')] },
+  // 책자
+  { id: 'bc', g: '책자', n: '책 표지 (무선)', in: { w: 148, h: 210, p: 64, fl: 0, q: 500, k: 1, ti: 0 }, note: '책등 = 본문 장수 × 본문 두께 + 표지 두께 × 2 (본문 용지는 아래 "본문 용지"에서 자동)',
+    calc: function (v, R) { var s = spineOf(v, v.inner || '백색 모조지 / 120g', R[0].paper); return [['책등', s.txt], ['표지 펼침', sz(2 * v.w + s.mm + 2 * v.fl, v.h)]]; },
+    rows: function (v, R) { var s = spineOf(v, v.inner || '백색 모조지 / 120g', R[0].paper); return [{ set: '표지', item: '표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm + 2 * v.fl, v.h) + ' · 책등 ' + mm(s.mm) + ')', pg: '1장 / 4p', flat: [2 * v.w + s.mm + 2 * v.fl, v.h, 1], gn: 'v' }]; },
+    def: [D('스노우지 / 250g', P40, '단면 / 무광 코팅', '-', '', 'PUR 무선제본')] },
+  { id: 'bi', g: '책자', n: '책 내지', in: { w: 148, h: 210, p: 64, q: 500, k: 1 }, note: '결은 책등과 같은 방향(세로결)으로 자동 계산 · 판걸이는 2의 배수 격자',
+    rows: function (v) { return [{ set: '본문', item: '본문', size: sz(v.w, v.h), pg: v.p + 'p', book: [v.w, v.h, v.p], gn: 'v' }]; }, def: [D('백색 모조지 / 120g', P44, '-', '-', '', 'PUR 무선제본')] },
+  { id: 'bk', g: '책자', n: '무선 책자 (표지 + 본문)', in: { w: 148, h: 210, p: 64, q: 500, k: 1, ti: 0, tc: 0 }, note: '책등 = 본문 장수(쪽수÷2) × 본문 두께 + 표지 두께 × 2 · 0.5mm 단위',
+    calc: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [['책등', s.txt], ['표지 펼침', sz(2 * v.w + s.mm, v.h)]]; },
+    rows: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [{ set: '표지', item: '표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm, v.h) + ' · 책등 ' + mm(s.mm) + ')', pg: '1장 / 4p', flat: [2 * v.w + s.mm, v.h, 1], gn: 'v' },
+      { set: '본문', item: '본문', size: sz(v.w, v.h), pg: v.p + 'p', book: [v.w, v.h, v.p], gn: 'v' }]; },
+    def: [D('스노우지 / 250g', P40, '단면 / 무광 코팅', '-', '', 'PUR 무선제본'), D('백색 모조지 / 120g', P44, '-', '-', '', 'PUR 무선제본')] },
+  { id: 'pb', g: '책자', n: '포토북 (PUR)', in: { w: 150, h: 210, p: 48, q: 1000, k: 1, ti: 0, tc: 0 }, note: '32p 이하면 중철도 가능',
+    calc: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [['책등', s.txt]]; },
+    rows: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [{ set: '표지', item: '포토북 표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm, v.h) + ' · 책등 ' + mm(s.mm) + ')', pg: '1장 / 4p', flat: [2 * v.w + s.mm, v.h, 1], gn: 'v' },
+      { set: '내지', item: '포토북 내지', size: sz(v.w, v.h), pg: v.p + 'p', book: [v.w, v.h, v.p], gn: 'v' }]; },
+    def: [D('스노우지 / 250g', P41, '단면 / 무광 코팅', '-', '', 'PUR 무선제본'), D('스노우지 / 180g', P44, '양면 / 기계 코팅', '-', '', 'PUR 무선제본')] },
+  { id: 'dia', g: '책자', n: '다이어리 (PUR)', in: { w: 128, h: 182, p: 192, q: 1000, k: 1, ti: 0, tc: 0 }, note: '내지는 필기용이라 코팅 X',
+    calc: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [['책등', s.txt]]; },
+    rows: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [{ set: '표지', item: '다이어리 표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm, v.h) + ' · 책등 ' + mm(s.mm) + ')', pg: '1장 / 4p', flat: [2 * v.w + s.mm, v.h, 1], gn: 'v' },
+      { set: '내지', item: '다이어리 내지', size: sz(v.w, v.h), pg: v.p + 'p', book: [v.w, v.h, v.p], gn: 'v' }]; },
+    def: [D('스노우지 / 300g', P41, '단면 / 무광 코팅', '-', '', 'PUR 무선제본'), D('백색 모조지 / 100g', P44, '-', '-', '', 'PUR 무선제본')] },
+  { id: 'jc', g: '책자', n: '중철 책자', in: { w: 148, h: 210, p: 32, q: 500, k: 1 }, note: '4쪽 단위 · 책등 없음',
     calc: function (v) { return [['쪽수', v.p % 4 ? v.p + '쪽은 4의 배수가 아니에요 → ' + Math.ceil(v.p / 4) * 4 + '쪽 권장' : v.p + '쪽 (4의 배수 OK)']]; },
-    rows: function (v) { return [{ item: '중철 책자', size: sz(v.w, v.h), qty: v.p + 'p (표지 포함)', book: [v.w, v.h, v.p] }]; },
-    def: [{ paper: '스노우 / 180g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: '중철제본', pack: '' }] },
+    rows: function (v) { return [{ item: '중철 책자', size: sz(v.w, v.h), pg: v.p + 'p (표지 포함)', book: [v.w, v.h, v.p], gn: 'v' }]; }, def: [D('스노우지 / 180g', P44, '-', '-', '', '중철 제본')] },
   { id: 'hc', g: '책자', n: '하드커버 (양장)', in: { w: 148, h: 210, p: 144, q: 500, k: 1, bd: 2, jt: 10, wr: 20, ti: 0 },
-    note: '보드 = 판형 가로 −4 · 세로 +7 / 책등 보드 = 책등 +4 / 홈 각 ' + '10mm / 싸개 사방 20mm 접어넣기 (업체마다 달라요)',
-    calc: function (v, R) { var H = hcOf(v, R); return [['책등 (본문 + 면지)', H.spTxt], ['앞·뒤 보드', sz(H.bw, H.bh) + ' × 2장'], ['책등 보드', sz(H.sw, H.bh)], ['싸개지', sz(H.cw, H.ch)], ['면지 (펼침)', sz(2 * v.w, v.h) + ' × 2장']]; },
+    note: '보드 = 판형 가로 −4 · 세로 +7 / 책등 보드 = 책등 +4 / 홈 10 / 싸개 사방 20 접어넣기 (업체마다 달라요)',
+    calc: function (v, R) { var H = hcOf(v, R); return [['책등 (본문 + 면지)', H.spTxt], ['앞·뒤 보드', sz(H.bw, H.bh) + ' × 2'], ['책등 보드', sz(H.sw, H.bh)], ['싸개지', sz(H.cw, H.ch)], ['면지 (펼침)', sz(2 * v.w, v.h) + ' × 2']]; },
     rows: function (v, R) { var H = hcOf(v, R); return [
-      { set: '싸개', item: '싸개지', size: sz(H.cw, H.ch), qty: '1장 / 1p', flat: [H.cw, H.ch, 1] },
-      { set: '보드', item: '보드', size: '앞·뒤 ' + sz(H.bw, H.bh) + ' ×2 / 책등 ' + sz(H.sw, H.bh), qty: '3pcs' },
-      { set: '면지', item: '면지', size: sz(2 * v.w, v.h) + ' (펼침)', qty: '2장', flat: [2 * v.w, v.h, 2] },
-      { set: '본문', item: '본문', size: sz(v.w, v.h), qty: v.p + 'p', book: [v.w, v.h, v.p] }]; },
-    def: [{ paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '합지 / 싸바리', pack: '' },
-      { paper: '갱판지 / 1200g (2mm)', print: '-', way: '-', coat: '-', post: '-', bind: '재단', pack: '' },
-      { paper: '한솔 매직칼라 / 120g', print: '-', way: '-', coat: '-', post: '-', bind: '재단 / 접착', pack: '' },
-      { paper: '모조 / 120g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: '사철 양장제본', pack: '' }] },
-  { id: 'cal', g: '지류', n: '데스크 캘린더', in: { w: 220, h: 150, n: 13, q: 500, k: 1 }, note: '본문 매수 + 받침대(갱판지 + 매직칼라 합지)',
-    rows: function (v) { return [{ set: '본문', item: '캘린더 본문', size: sz(v.w, v.h), qty: v.n + '매 (' + v.n * 2 + 'p)', flat: [v.w, v.h, v.n] },
-      { set: '받침대', item: '받침대 싸개', size: '받침대에 맞춤', qty: '2p' }, { set: '받침대', item: '받침대 보드', size: '받침대에 맞춤', qty: '-' }]; },
-    def: [{ paper: '앙상블 / 230g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 기계 코팅', post: '타공 (트윈링 규격 맞춤)', bind: '상철 트윈링 (화이트)', pack: '' },
-      { paper: '한솔 매직칼라 / 120g', print: '-', way: '-', coat: '-', post: '타공 (트윈링 규격 맞춤)', bind: '합지', pack: '' },
-      { paper: '갱판지 / 1200g', print: '-', way: '-', coat: '-', post: '타공 (트윈링 규격 맞춤)', bind: '합지', pack: '' }] },
+      { set: '싸개', item: '싸개지', size: sz(H.cw, H.ch), pg: '1장 / 1p', flat: [H.cw, H.ch, 1], gn: 'v', die: 'hard' },
+      { set: '보드', item: '보드', size: '앞·뒤 ' + sz(H.bw, H.bh) + ' ×2 / 책등 ' + sz(H.sw, H.bh), pg: '3pcs' },
+      { set: '면지', item: '면지', size: sz(2 * v.w, v.h) + ' (펼침)', pg: '2장', flat: [2 * v.w, v.h, 2], gn: 'v' },
+      { set: '본문', item: '본문', size: sz(v.w, v.h), pg: v.p + 'p', book: [v.w, v.h, v.p], gn: 'v' }]; },
+    def: [D('스노우지 / 120g', P40, '단면 / 무광 코팅', '-', '합지 / 싸바리', '양장 (각양장) · 사철'), D('갱판지 / 1200g', '-', '-', '-', '재단', '-'),
+      D('매직칼라 / 120g (한솔제지)', '-', '-', '-', '재단 / 접착', '-'), D('백색 모조지 / 120g', P44, '-', '-', '', '양장 (각양장) · 사철')] },
+  // 캘린더
+  { id: 'cal', g: '캘린더', n: '데스크 캘린더', in: { w: 220, h: 150, n: 13, q: 500, k: 1 }, note: '본문 매수 + 받침대(갱판지 + 매직칼라 합지)',
+    rows: function (v) { return [{ set: '본문', item: '캘린더 본문', size: sz(v.w, v.h), pg: v.n + '매 (' + v.n * 2 + 'p)', flat: [v.w, v.h, v.n] },
+      { set: '받침대', item: '받침대 싸개', size: '받침대에 맞춤', pg: '2p' }, { set: '받침대', item: '받침대 보드', size: '받침대에 맞춤', pg: '-' }]; },
+    def: [D('앙상블 / 230g (한솔제지)', P44, '양면 / 기계 코팅', '-', '타공 (트윈링 규격 맞춤)', '상철 트윈링 (화이트)'),
+      D('매직칼라 / 120g (한솔제지)', '-', '-', '-', '타공 (트윈링 규격 맞춤) / 합지', '-'), D('갱판지 / 1200g', '-', '-', '-', '타공 (트윈링 규격 맞춤) / 합지', '-')] },
+  { id: 'wcal', g: '캘린더', n: '벽걸이 캘린더', in: { w: 230, h: 360, p: 28, q: 500, k: 1 }, note: '중철 · 걸이용 타공',
+    rows: function (v) { return [{ item: '벽걸이 캘린더', size: sz(v.w, v.h), pg: v.p + 'p (표지 포함)', book: [v.w, v.h, v.p] }]; },
+    def: [D('스노우지 / 150g', P44, '양면 / 무광 코팅', '-', '걸이용 타공', '상단 중철 (2방)')] },
+  // 패키지
+  { id: 'cb', g: '패키지', n: 'G형 골판지 박스 (겉합지·골판지·속합지)', in: { L: 220, W: 310, H: 40, t: 20, q: 500, k: 1 },
+    note: '시즌그리팅 아웃박스 · 겉합지 = 표면 인쇄 / 속합지 = 안쪽면 · 커버는 가격방어용으로 가장 비싼 후가공을 전면 사이즈로',
+    calc: function (v) { var G = dieGeom('mailer', v); return [['대략 전개', sz(G.W, G.H)], ['대략 외경 (E골)', sz(v.L + 15, v.W + 3, v.H + 3)]]; },
+    rows: function (v) { var G = dieGeom('mailer', v); return [
+      { set: '겉합지', item: '박스 겉면 합지', size: sz(v.L, v.W, v.H) + ' (내경 · 전개 약 ' + sz(G.W, G.H) + ')', pg: '1장 / 1p', flat: [G.W, G.H, 1], die: 'mailer' },
+      { set: '골판지', item: 'E골 골판지', size: '겉합지에 맞춤', pg: '-' },
+      { set: '속합지', item: '박스 안쪽면 합지', size: '전개 약 ' + sz(G.W, G.H), pg: '1장 / 1p', flat: [G.W, G.H, 1], die: 'mailer' }]; },
+    def: [D('스노우지 / 250g', P40, '단면 / 무광 코팅', '전면 에폭시', '합지 / 톰슨 (완칼) / 오시 (n줄) / 접착 / 조립'), D('E골 골판지', '-', '-', '-', '합지', '-'),
+      D('스노우지 / 200g', P40, '단면 / 무광 코팅', '-', '합지', '-')] },
+  { id: 'sl', g: '패키지', n: '슬리브', in: { X: 150, Y: 210, D: 10, g: 15, q: 1000, k: 1 }, note: '양옆이 뚫린 띠 · 접는 선이 세로라 세로결',
+    calc: function (v) { var G = dieGeom('sleeve', v); return [['전개', sz(G.W, G.H)]]; },
+    rows: function (v) { var G = dieGeom('sleeve', v); return [{ item: '슬리브', size: sz(v.X, v.Y, v.D) + ' (전개 ' + sz(G.W, G.H) + ')', pg: '1장 / 1p', flat: [G.W, G.H, 1], gn: 'v', die: 'sleeve' }]; },
+    def: [D('로얄 아이보리 (BV) / 400g', P40, '단면 / 무광 라미', '투명 홀로그램박 (태창 028T)', '톰슨 (완칼) / 오시 (n줄) / 접착')] },
+  { id: 'ct', g: '패키지', n: '단상자 (꽂이형)', in: { L: 100, D: 40, H: 150, g: 15, t: 15, q: 1000, k: 1 }, note: '정면 L · 옆 D · 높이 H (내경) · 정확한 건 목형 도면',
+    calc: function (v) { var G = dieGeom('rte', v); return [['대략 전개', sz(G.W, G.H)]]; },
+    rows: function (v) { var G = dieGeom('rte', v); return [{ item: '단상자', size: sz(v.L, v.D, v.H) + ' (내경 · 전개 약 ' + sz(G.W, G.H) + ')', pg: '1장 / 1p', flat: [G.W, G.H, 1], die: 'rte' }]; },
+    def: [D('아이보리 (AB) / 350g', P40, '단면 / 무광 코팅', '-', '톰슨 (완칼) / 오시 (n줄) / 접착')] },
   { id: 'sb', g: '패키지', n: '싸바리 박스 (천지)', in: { L: 200, W: 270, H: 50, Hl: 50, q: 500, k: 1, bd: 2, cl: 1, wr: 15 },
-    note: '내경 기준 · 상짝은 하짝 외경 + 사방 여유 · 싸개는 높이만큼 감싸고 접어넣기 15mm (업체마다 달라요)',
-    calc: function (v) { var B = sbOf(v); return [['하짝 외경', sz(B.oL, B.oW, B.oH)], ['하짝 싸개지', sz(B.c1L, B.c1W)], ['상짝 내경', sz(B.iL2, B.iW2, v.Hl)], ['상짝 외경', sz(B.oL2, B.oW2, B.oH2)], ['상짝 싸개지', sz(B.c2L, B.c2W)], ['바닥 속지', sz(v.L - 1, v.W - 1)]]; },
+    note: '내경 기준 · 상짝 = 하짝 외경 + 사방 여유 · 싸개 접어넣기 15 (업체마다 달라요)',
+    calc: function (v) { var B = sbOf(v); return [['하짝 외경', sz(B.oL, B.oW, B.oH)], ['하짝 싸개지', sz(B.c1L, B.c1W)], ['상짝 내경', sz(B.iL2, B.iW2, v.Hl)], ['상짝 외경', sz(B.oL2, B.oW2, B.oH2)], ['상짝 싸개지', sz(B.c2L, B.c2W)]]; },
     rows: function (v) { var B = sbOf(v); return [
-      { set: '상짝', item: '상짝 싸개지', size: sz(B.c2L, B.c2W) + ' (상짝 외경 ' + sz(B.oL2, B.oW2, B.oH2) + ')', qty: '1장 / 1p', flat: [B.c2L, B.c2W, 1] },
-      { set: '하짝', item: '하짝 싸개지', size: sz(B.c1L, B.c1W) + ' (하짝 외경 ' + sz(B.oL, B.oW, B.oH) + ')', qty: '1장 / 1p', flat: [B.c1L, B.c1W, 1] },
-      { set: '보드', item: '보드', size: '하짝 내경 ' + sz(v.L, v.W, v.H) + ' 맞춤', qty: '-' }]; },
-    def: [{ paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '무광 은박 (태창 은무광 120)', bind: '싸바리 / 조립', pack: '' },
-      { paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '싸바리 / 조립', pack: '' },
-      { paper: '갱판지 / 1200g (2mm)', print: '-', way: '-', coat: '-', post: '-', bind: '재단 / 배접', pack: '' }] },
-  { id: 'ct', g: '패키지', n: '단상자 (지기)', in: { L: 100, D: 40, H: 150, q: 1000, k: 1, gl: 15, tk: 15 },
-    note: '정면 가로 L · 옆 폭 D · 높이 H (내경) / 대략 전개 = 가로 2L+2D+풀칠날개, 세로 H+2(D+꽂이) · 정확한 건 목형 도면',
-    calc: function (v) { var E = ctOf(v); return [['대략 전개', sz(E[0], E[1])]]; },
-    rows: function (v) { var E = ctOf(v); return [{ item: '단상자', size: sz(v.L, v.D, v.H) + ' (내경, 전개 약 ' + sz(E[0], E[1]) + ')', qty: '1장 / 1p', flat: [E[0], E[1], 1] }]; },
-    def: [{ paper: 'AB(아이보리) / 350g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '톰슨 / 오시 / 접착', pack: '' }] },
-  { id: 'cb', g: '패키지', n: '골판지 박스 (G형·P형)', in: { L: 200, W: 160, H: 30, q: 500, k: 1, f: 'E', t: 'G' },
-    note: '내용물(내경) 기준 대략 외경 · E골 1.5mm / B골 3mm (유패키지 예시 기준) · G골은 E골보다 얇아서 실제는 조금 작아요',
-    calc: function (v) { var O = cbOf(v); return [['대략 외경 (' + v.t + '형 ' + v.f + '골)', sz(O[0], O[1], O[2])]]; },
-    rows: function (v) { var O = cbOf(v); return [{ set: '표면지', item: v.t + '형 박스 (' + v.f + '골 합지)', size: sz(v.L, v.W, v.H) + ' (내경, 외경 약 ' + sz(O[0], O[1], O[2]) + ')', qty: '1장 / 1p' },
-      { set: '골판지', item: v.f + '골 골판지', size: '표면지에 맞춤', qty: '-' }]; },
-    def: [{ paper: '스노우 / 250g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '합지(상합) / 톰슨 / 오시 / 접착 / 조립', pack: '' },
-      { paper: 'E골 백색 골판지', print: '-', way: '-', coat: '-', post: '-', bind: '합지', pack: '' }] }
+      { set: '상짝', item: '상짝 싸개지', size: sz(B.c2L, B.c2W) + ' (상짝 외경 ' + sz(B.oL2, B.oW2, B.oH2) + ')', pg: '1장 / 1p', flat: [B.c2L, B.c2W, 1] },
+      { set: '하짝', item: '하짝 싸개지', size: sz(B.c1L, B.c1W) + ' (하짝 외경 ' + sz(B.oL, B.oW, B.oH) + ')', pg: '1장 / 1p', flat: [B.c1L, B.c1W, 1] },
+      { set: '보드', item: '보드', size: '하짝 내경 ' + sz(v.L, v.W, v.H) + ' 맞춤', pg: '-' }]; },
+    def: [D('스노우지 / 120g', P40, '단면 / 무광 코팅', '무광 은박 (태창 은무광 120)', '싸바리 / 조립'), D('스노우지 / 120g', P40, '단면 / 무광 코팅', '-', '싸바리 / 조립'), D('갱판지 / 1200g', '-', '-', '-', '재단 / 배접', '-')] }
 ];
-var IN_LABEL = { w: ['가로', 'mm'], h: ['세로', 'mm'], q: ['수량', '개'], k: ['구성', '종'], p: ['쪽수', 'p'], n: ['단수/매수', ''], mg: ['봉투 여유(한쪽)', 'mm'], fl: ['옆날개', 'mm'], lid: ['뚜껑', 'mm'],
-  ti: ['본문 두께 직접', 'mm (0=자동)'], tc: ['표지 두께 직접', 'mm (0=자동)'], bd: ['보드 두께', 'mm'], jt: ['홈', 'mm'], wr: ['접어넣기', 'mm'], L: ['가로(L)', 'mm'], W: ['세로(W)', 'mm'], D: ['폭(D)', 'mm'],
-  H: ['높이(H)', 'mm'], Hl: ['상짝 높이', 'mm'], cl: ['상짝 여유(한쪽)', 'mm'], gl: ['풀칠날개', 'mm'], tk: ['꽂이날개', 'mm'], f: ['골', ''], t: ['형태', ''] };
+var GROUPS = ['지류', '책자', '캘린더', '패키지'];
+var IN_LABEL = { w: ['가로', 'mm'], h: ['세로', 'mm'], q: ['수량', '개'], k: ['종 수', '종'], p: ['쪽수', 'p'], n: ['단수·매수', ''], mg: ['봉투 여유', 'mm'], fl: ['날개', 'mm'], lid: ['뚜껑', 'mm'],
+  ti: ['본문 두께 직접', 'mm'], tc: ['표지 두께 직접', 'mm'], bd: ['보드 두께', 'mm'], jt: ['홈', 'mm'], wr: ['접어넣기', 'mm'], L: ['가로(L)', 'mm'], W: ['세로(W)', 'mm'], D: ['폭(D)', 'mm'],
+  H: ['높이(H)', 'mm'], Hl: ['상짝 높이', 'mm'], cl: ['상짝 여유', 'mm'], g: ['풀칠날개', 'mm'], t: ['꽂이날개', 'mm'], X: ['정면 가로', 'mm'], Y: ['높이', 'mm'] };
 
 function spineOf(v, inner, cover) {
   var ti = +v.ti || thickOf(inner), tc = +v.tc || thickOf(cover);
-  if (!ti) return { mm: 0, txt: '본문 용지 두께를 몰라요 · "본문 두께 직접"에 mm로 넣어 주세요' };
+  if (!ti) return { mm: 0, txt: '본문 용지 두께를 몰라요 · "본문 두께 직접"에 mm로' };
   var s = r05(v.p / 2 * ti + 2 * (tc || 0));
   return { mm: s, txt: mm(s) + 'mm (본문 ' + v.p / 2 + '장 × ' + mm(ti * 1000) + '㎛' + (tc ? ' + 표지 ' + mm(tc * 1000) + '㎛×2' : '') + ')' };
 }
 function hcOf(v, R) {
-  var ti = +v.ti || thickOf(R[3].paper), te = thickOf(R[2].paper) || 0.14;
-  var sp = ti ? r05(v.p / 2 * ti + 2 * te) : 0;
+  var ti = +v.ti || thickOf(R[3].paper), te = thickOf(R[2].paper) || 0.14, sp = ti ? r05(v.p / 2 * ti + 2 * te) : 0;
   var bw = v.w - 4, bh = v.h + 7, sw = sp + 4, cw = 2 * bw + sw + 2 * v.jt + 2 * v.wr, ch = bh + 2 * v.wr;
   return { sp: sp, spTxt: ti ? mm(sp) + 'mm' : '본문 두께를 몰라요 · 직접 입력', bw: bw, bh: bh, sw: sw, cw: cw, ch: ch };
 }
@@ -385,105 +443,336 @@ function sbOf(v) {
   var t = +v.bd, oL = v.L + 2 * t, oW = v.W + 2 * t, oH = v.H + t, iL2 = oL + 2 * v.cl, iW2 = oW + 2 * v.cl, oL2 = iL2 + 2 * t, oW2 = iW2 + 2 * t, oH2 = +v.Hl + t;
   return { oL: oL, oW: oW, oH: oH, c1L: oL + 2 * oH + 2 * v.wr, c1W: oW + 2 * oH + 2 * v.wr, iL2: iL2, iW2: iW2, oL2: oL2, oW2: oW2, oH2: oH2, c2L: oL2 + 2 * oH2 + 2 * v.wr, c2W: oW2 + 2 * oH2 + 2 * v.wr };
 }
-function ctOf(v) { return [2 * v.L + 2 * v.D + +v.gl, +v.H + 2 * (+v.D + +v.tk)]; }
-function cbOf(v) { var A = { GE: [15, 3, 3], GB: [23, 4, 4], PE: [3, 10, 3], PB: [4, 15, 4] }[v.t + v.f] || [15, 3, 3]; return [v.L + A[0], v.W + A[1], v.H + A[2]]; }
 
 /* ── 상태 ── */
-var S = { view: ls.get('sp:view') || 'list', id: ls.get('sp:id') || '' };
+var S = { view: ls.get('pr:view') || 'doc', id: ls.get('pr:id') || '', add: false };
 function tpl(id) { return T.filter(function (t) { return t.id === id; })[0]; }
 function stateOf(t) {
-  var my = {}; try { my = JSON.parse(ls.get('sp:my:' + t.id) || '{}'); } catch (e) {}
+  var my = {}; try { my = JSON.parse(ls.get('pr:my:' + t.id) || '{}'); } catch (e) {}
   var v = JSON.parse(JSON.stringify(t.in)), R = JSON.parse(JSON.stringify(t.def));
-  if (my.v) for (var k in my.v) v[k] = my.v[k];
+  if (my.v) for (var k in my.v) if (k in v) v[k] = my.v[k];
   if (my.R) my.R.forEach(function (r, i) { if (R[i]) for (var k2 in r) R[i][k2] = r[k2]; });
   return { v: v, R: R };
 }
 var CUR = null;
-
 function render() {
   $$('#nav button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === (S.view === 'one' ? 'list' : S.view)); });
-  ({ list: renderList, one: renderOne, paper: renderPaper, calc: renderCalc })[S.view]();
+  ({ doc: renderDoc, list: renderList, one: renderOne, ref: renderRef, calc: renderCalc, die: renderDie })[S.view]();
 }
+function go(v) { S.view = v; ls.set('pr:view', v); window.scrollTo(0, 0); render(); }
+
+/* ── 대표 품목 ── */
 function renderList() {
-  var h = '<div class="phd"><b>품목 고르기</b><small>지난 사양서에서 많이 쓴 스펙이 미리 채워져요</small></div>';
-  ['지류', '책자', '패키지'].forEach(function (g) {
+  var d = curDoc(), h = '<div class="phd"><b>대표 품목</b><small>' + (S.add && d ? '<span class="addb">‘' + esc(d.name) + '’에 넣을 품목을 골라요</span>' : '지난 사양서에서 많이 쓴 스펙이 미리 채워져요') + '</small></div>';
+  GROUPS.forEach(function (g) {
     h += '<div class="sec">' + g + '</div><div class="tg">' + T.filter(function (t) { return t.g === g; }).map(function (t) {
-      var my = ls.get('sp:my:' + t.id); return '<button data-id="' + t.id + '"><b>' + esc(t.n) + '</b><small>' + esc(t.def[0].paper) + (my ? ' · 내 기본값' : '') + '</small></button>';
+      var my = ls.get('pr:my:' + t.id); return '<button data-id="' + t.id + '"><b>' + esc(t.n) + '</b><small>' + esc(t.def[0].paper) + (my ? ' · 내 기본값' : '') + '</small></button>';
     }).join('') + '</div>';
   });
   $('#main').innerHTML = h;
-  $$('.tg button').forEach(function (b) { b.onclick = function () { S.id = b.dataset.id; S.view = 'one'; ls.set('sp:id', S.id); ls.set('sp:view', 'one'); window.scrollTo(0, 0); render(); }; });
+  $$('.tg button').forEach(function (b) { b.onclick = function () { S.id = b.dataset.id; ls.set('pr:id', S.id); CUR = null; go('one'); }; });
 }
+function sheetHint(r, v) {
+  var bs = r.flat ? bestSheet(r.flat[0], r.flat[1], false, r.gn) : r.book ? bestSheet(r.book[0], r.book[1], true) : null;
+  if (!bs || !bs.n) return r.flat || r.book ? '<div class="cwarn">전지보다 커서 한 장에 안 들어가요</div>' : '';
+  var q = (v && v.q) || 0, need = r.flat ? Math.ceil(q * ((v && v.k) || 1) * r.flat[2] / bs.n * 1.05) : Math.ceil(r.book[2] / (bs.n * 2) * q * 1.05);
+  return '<div class="sh"><b>' + bs.P.n + '</b> ' + (r.book ? bs.n + '판걸이 (1장 ' + bs.n * 2 + 'p)' : bs.n + '개 걸이') + ' · 로스 ' + Math.round(bs.loss * 100) + '%' + (q ? ' · 전지 약 ' + fmtN(need) + '장 (' + fmtN(need / 500, 2) + '연)' : '') + (r.gn || r.book ? ' · ' + GN_LB[r.book ? 'v' : r.gn] : '') + '</div>';
+}
+var FLD = [['paper', '용지', 'dl-paper'], ['print', '인쇄', 'dl-print'], ['coat', '코팅', 'dl-coat'], ['fin', '특수가공', 'dl-fin'], ['cut', '톰슨·접지·가공', 'dl-cut'], ['bind', '제본', 'dl-bind'], ['pack', '배치·포장', 'dl-pack']];
 function renderOne() {
-  var t = tpl(S.id); if (!t) { S.view = 'list'; return render(); }
+  var t = tpl(S.id); if (!t) return go('list');
   if (!CUR || CUR.id !== t.id) { var st = stateOf(t); CUR = { id: t.id, v: st.v, R: st.R }; }
   var v = CUR.v, h = '<div class="phd"><button class="bk" id="back" aria-label="목록">‹</button><b>' + esc(t.n) + '</b></div>';
   h += '<div class="card"><div class="ct">입력</div><div class="ig">' + Object.keys(v).map(function (k) {
     var L = IN_LABEL[k] || [k, ''];
-    if (k === 'f') return '<div class="f"><label>' + L[0] + '</label><select data-v="f">' + ['E', 'B'].map(function (o) { return '<option' + (v.f === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></div>';
-    if (k === 't') return '<div class="f"><label>' + L[0] + '</label><select data-v="t">' + ['G', 'P'].map(function (o) { return '<option value="' + o + '"' + (v.t === o ? ' selected' : '') + '>' + o + '형</option>'; }).join('') + '</select></div>';
     return '<div class="f"><label>' + L[0] + (L[1] ? ' <i>' + L[1] + '</i>' : '') + '</label><input type="number" inputmode="decimal" step="any" data-v="' + k + '" value="' + v[k] + '"></div>';
-  }).join('') + '</div>' + (t.note ? '<div class="nt">' + esc(t.note) + '</div>' : '') + '</div>';
+  }).join('') + '</div>' + (t.id === 'bc' ? '<div class="f" style="margin-top:10px"><label>본문 용지 <i>책등 계산용</i></label><input data-inner list="dl-paper" value="' + esc(v.inner || '백색 모조지 / 120g') + '"></div>' : '') +
+    (t.note ? '<div class="nt">' + esc(t.note) + '</div>' : '') + '</div>';
   h += '<div id="out">' + outHtml(t) + '</div>';
-  h += '<div class="acts"><button class="sv" id="save">내 기본값으로 저장</button><button class="rs" id="reset">처음 값으로</button></div>';
+  var d = curDoc();
+  h += '<button class="cp" id="toDoc">' + (d ? '‘' + esc(d.name) + '’에 추가' : '새 사양서 만들어서 추가') + '</button>';
+  h += '<div class="acts"><button class="rs" id="copy">이 품목만 복사</button><button class="sv" id="save">내 기본값으로 저장</button><button class="rs" id="reset">처음 값</button></div>';
   $('#main').innerHTML = h; bindOne(t);
 }
 function outHtml(t) {
   var v = CUR.v, R = CUR.R, h = '';
   if (t.calc) h += '<div class="card"><div class="ct">자동 계산</div><dl class="cl">' + t.calc(v, R).map(function (p) { return '<dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]) + '</dd>'; }).join('') + '</dl></div>';
   var rows = t.rows(v, R);
-  h += '<div class="sec">사양서 행<small>' + rows.length + '행 · 칸을 눌러 고칠 수 있어요</small></div>';
+  h += '<div class="sec">사양서 행<small>' + rows.length + '행 · 칸을 눌러 고쳐요</small></div>';
   rows.forEach(function (r, i) {
-    var d = R[i] || {}, bs = r.flat ? bestSheet(r.flat[0], r.flat[1], false) : r.book ? bestSheet(r.book[0], r.book[1], true) : null, sheet = '';
-    if (bs) {
-      var need = r.flat ? Math.ceil(v.q * (v.k || 1) * r.flat[2] / bs.n * 1.05) : Math.ceil(r.book[2] / (bs.n * 2) * v.q * 1.05);
-      sheet = '<div class="sh"><b>' + bs.P.n + '</b> ' + (r.book ? bs.n + '판걸이 (1장 ' + bs.n * 2 + 'p)' : bs.n + '개 걸이') + ' · 로스 ' + Math.round(bs.loss * 100) + '% · 전지 약 ' + fmtN(need) + '장 (' + fmtN(need / 500, 2) + '연, 여분 5%)</div>';
-    }
-    h += '<div class="card rw"><div class="rh"><b>' + esc(r.set && r.item.indexOf(r.set) < 0 ? r.set + ' · ' : '') + esc(r.item) + '</b><small>' + esc(r.size) + ' · ' + esc(r.qty) + '</small></div>' +
-      ['paper', 'print', 'way', 'coat', 'post', 'bind', 'pack'].map(function (k) {
-        var lb = { paper: '종이', print: '인쇄도수', way: '방식·컬러', coat: '코팅', post: '박·형압·에폭시·미싱', bind: '접지·제본·톰슨', pack: '포장' }[k];
-        var val = k === 'bind' && r.bindAuto && !d.bind ? r.bindAuto : d[k] || '';
-        return '<label class="fr"><span>' + lb + '</span><input data-r="' + i + '" data-k="' + k + '" value="' + esc(val) + '"' + (k === 'paper' ? ' list="papers"' : '') + '></label>';
-      }).join('') + sheet + '</div>';
+    var d = R[i] || {};
+    h += '<div class="card rw"><div class="rh"><b>' + esc(r.set && r.item.indexOf(r.set) < 0 ? r.set + ' · ' : '') + esc(r.item) + '</b><small>' + esc(r.size) + ' · ' + esc(r.pg) + '</small></div>' +
+      FLD.map(function (f) {
+        var val = f[0] === 'cut' && r.cutAuto && !d.cut ? r.cutAuto : d[f[0]] || '';
+        return '<label class="fr"><span>' + f[1] + '</span><input data-r="' + i + '" data-k="' + f[0] + '" value="' + esc(val) + '" list="' + f[2] + '"></label>';
+      }).join('') + (r.flat && !r.book ? '<label class="fr"><span>결</span><select data-r="' + i + '" data-k="gn">' + ['', 'v', 'h'].map(function (g) { return '<option value="' + g + '"' + ((d.gn != null ? d.gn : r.gn || '') === g ? ' selected' : '') + '>' + GN_LB[g] + '</option>'; }).join('') + '</select></label>' : '') +
+      sheetHint(Object.assign({}, r, d.gn != null ? { gn: d.gn } : {}), v) + '</div>';
   });
-  h += '<button class="cp" id="copy">사양서 표로 복사 (시트에 붙여넣기)</button><div class="nt c">복사한 뒤 사양서 시트의 \'대분류\' 칸을 누르고 붙여넣으면 칸마다 들어가요</div>';
   return h;
 }
-function tsv(t) {
-  var v = CUR.v, R = CUR.R, rows = t.rows(v, R);
-  return rows.map(function (r, i) {
-    var d = R[i] || {}, bind = d.bind || r.bindAuto || '';
-    return [t.n, (r.set ? r.set + ' ' : '') + (v.k > 1 ? v.k + '종' : '1종'), r.item, r.size, d.paper || '', r.qty, d.print || '', d.way || '', d.coat || '', d.post || '', bind, d.pack || ''].map(function (x) { return String(x).replace(/[\t\n]/g, ' '); }).join('\t');
-  }).join('\n');
+function tplRows(t) {
+  var v = CUR.v, R = CUR.R;
+  return t.rows(v, R).map(function (r, i) {
+    var d = R[i] || {}, nm = t.n.replace(/\s*\(.*\)\s*$/, ''), o = { cat: t.g, set: nm + (r.set ? ' ' + r.set : ''), item: r.item, q: v.q || '', gift: '', size: r.size, pg: r.pg, flat: r.flat || null, book: r.book || null, gn: d.gn != null ? d.gn : r.gn || '', etc: v.k > 1 ? v.k + '종 정합' : '' };
+    FLD.forEach(function (f) { o[f[0]] = f[0] === 'cut' && r.cutAuto && !d.cut ? r.cutAuto : d[f[0]] || ''; });
+    return o;
+  });
 }
 function bindOne(t) {
-  $('#back').onclick = function () { S.view = 'list'; ls.set('sp:view', 'list'); window.scrollTo(0, 0); render(); };
+  $('#back').onclick = function () { go('list'); };
   var redraw = function () { $('#out').innerHTML = outHtml(t); bindOut(); };
-  $$('[data-v]').forEach(function (i) { i.oninput = i.onchange = function () { CUR.v[i.dataset.v] = i.tagName === 'SELECT' ? i.value : (i.value === '' ? 0 : +i.value); redraw(); }; });
-  $('#save').onclick = function () { ls.set('sp:my:' + t.id, JSON.stringify({ v: CUR.v, R: CUR.R })); toast('이 품목의 내 기본값으로 저장했어요'); };
-  $('#reset').onclick = function () { ls.set('sp:my:' + t.id, ''); CUR = null; renderOne(); toast('처음 값으로 되돌렸어요'); };
+  $$('[data-v]').forEach(function (i) { i.oninput = function () { CUR.v[i.dataset.v] = i.value === '' ? 0 : +i.value; redraw(); }; });
+  if ($('[data-inner]')) $('[data-inner]').onchange = function () { CUR.v.inner = this.value; redraw(); };
+  $('#save').onclick = function () { ls.set('pr:my:' + t.id, JSON.stringify({ v: CUR.v, R: CUR.R })); toast('이 품목의 내 기본값으로 저장했어요'); };
+  $('#reset').onclick = function () { ls.set('pr:my:' + t.id, ''); CUR = null; renderOne(); toast('처음 값으로 되돌렸어요'); };
+  $('#copy').onclick = function () { copyText(tplRows(t).map(rowTsv).join('\n'), '복사했어요 · 사양서 시트 대분류 칸에 붙여넣기'); };
+  $('#toDoc').onclick = function () {
+    var d = curDoc() || newDoc(); tplRows(t).forEach(function (r) { r.id = uid(); d.rows.push(r); }); saveDocs();
+    S.add = false; toast(t.n + ' ' + tplRows(t).length + '행 추가했어요'); go('doc');
+  };
   bindOut();
-  function bindOut() {
-    $$('[data-r]').forEach(function (i) { i.onchange = function () { var R = CUR.R; R[+i.dataset.r] = R[+i.dataset.r] || {}; R[+i.dataset.r][i.dataset.k] = i.value; if (i.dataset.k === 'paper') redraw(); }; });
-    $('#copy').onclick = function () {
-      var x = tsv(t);
-      (navigator.clipboard ? navigator.clipboard.writeText(x) : Promise.reject()).then(function () { toast('복사했어요 · 시트에 붙여넣기'); }, function () { var ta = document.createElement('textarea'); ta.value = x; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('복사했어요'); } catch (e) {} ta.remove(); });
-    };
-  }
+  function bindOut() { $$('#out [data-r]').forEach(function (i) { i.onchange = function () { var R = CUR.R; R[+i.dataset.r] = R[+i.dataset.r] || {}; R[+i.dataset.r][i.dataset.k] = i.value; redraw(); }; }); }
 }
-function renderPaper() {
-  var h = '<div class="phd"><b>용지 두께</b><small>평량별 두께 (㎛, 와우프레스 제작가이드 기준)</small></div>';
-  Object.keys(THICK).forEach(function (k) {
-    h += '<div class="card"><div class="ct">' + k + (k === '아트' ? '지' : k === '모조' ? '지' : ' 화이트지') + '</div><div class="tt">' + Object.keys(THICK[k]).map(function (g) { return '<div><small>' + g + 'g</small><b>' + THICK[k][g] + '<i>㎛</i></b></div>'; }).join('') + '</div></div>';
-  });
-  h += '<div class="card"><div class="ct">책등 계산법</div><p class="tx">무선·PUR 책등 = <b>본문 장수(쪽수 ÷ 2) × 본문 한 장 두께</b> + 표지 두께 × 2, 0.5mm 단위로 반올림.<br>예) 모조 120g(140㎛) 200쪽 → 100장 × 0.14 = 14mm + 표지 스노우 250g 0.25×2 = 14.5mm<br><br>양장은 본문 + 면지 두께로 책등을 구하고, 책등 보드는 그보다 4mm 크게 · 앞뒤 보드와 사이에 홈 10mm 정도를 둬요.<br><br>같은 평량이어도 제지사·지종마다 두께가 달라요(특히 앙상블·랑데뷰·아르떼 같은 고급지). 정확한 값은 제지사 두께표나 인쇄소 가제본으로 확인하세요.</p></div>';
-  $('#main').innerHTML = h;
-}
-$$('#nav button').forEach(function (b) { b.onclick = function () { S.view = b.dataset.v; ls.set('sp:view', S.view); window.scrollTo(0, 0); render(); }; });
-$('#brand').onclick = function () { S.view = 'list'; ls.set('sp:view', 'list'); window.scrollTo(0, 0); render(); };
-$('#papers').innerHTML = PAPER_LIST.map(function (p) { return '<option value="' + esc(p) + '">'; }).join('');
-render();
 
+/* ── 사양서 (여러 품목 → MASTER 양식) ── */
+var MASTER = ['대분류', '소분류', 'NO.', '세부 품목', '제작수량', '증정 / 총 제작', '판형 (가로x세로x높이)', '페이지', '용지', '평량', '인쇄', '코팅', '특수가공', '톰슨 · 접지 · 가공', '제본', '배치 · 포장', '기타 전달 사항'];
+var DOCS = (function () { try { return JSON.parse(ls.get('pr:docs') || '[]'); } catch (e) { return []; } })();
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function saveDocs() { ls.set('pr:docs', JSON.stringify(DOCS)); }
+function curDoc() { var id = ls.get('pr:doc'); return DOCS.filter(function (d) { return d.id === id; })[0] || DOCS[0] || null; }
+function newDoc(name) { var d = { id: uid(), name: name || '[아티스트]프로젝트_사양서', date: new Date().toISOString().slice(0, 10), rows: [] }; DOCS.unshift(d); ls.set('pr:doc', d.id); saveDocs(); return d; }
+function splitPaper(p) { var m = String(p || '').match(/^(.*?)\s*\/\s*([\d,]+\s*g|[\d.]+\s*(?:T|㎛|μm))\s*(\(.*\))?\s*$/); return m ? [(m[1] + (m[3] ? ' ' + m[3] : '')).trim(), m[2].replace(/\s/g, '')] : [p || '', '']; }
+function rowTsv(r, i) {
+  var pp = splitPaper(r.paper);
+  return [r.cat, r.set, i == null ? '' : i + 1, r.item, r.q, r.gift, r.size, r.pg, pp[0], pp[1], r.print, r.coat, r.fin, r.cut, r.bind, r.pack, r.etc].map(function (x) { return String(x == null ? '' : x).replace(/[\t\n]/g, ' '); }).join('\t');
+}
+var DF = [['item', '세부 품목', ''], ['set', '소분류', ''], ['cat', '대분류', ''], ['q', '제작수량', ''], ['gift', '증정 / 총 제작', ''], ['size', '판형', ''], ['pg', '페이지', ''],
+  ['paper', '용지', 'dl-paper'], ['print', '인쇄', 'dl-print'], ['coat', '코팅', 'dl-coat'], ['fin', '특수가공', 'dl-fin'], ['cut', '톰슨·접지·가공', 'dl-cut'], ['bind', '제본', 'dl-bind'], ['pack', '배치·포장', 'dl-pack'], ['etc', '기타 전달 사항', '']];
+var OPEN = {};
+function renderDoc() {
+  var d = curDoc(), h = '<div class="phd"><b>사양서</b><small>품목을 모아서 MASTER 양식 순서로 복사 · 이 기기에 저장돼요</small></div>';
+  h += '<div class="chips" style="margin:0 0 12px">' + DOCS.map(function (x) { return '<button data-doc="' + x.id + '"' + (d && x.id === d.id ? ' class="on"' : '') + '>' + esc(x.name) + '</button>'; }).join('') + '<button id="dNew">+ 새 사양서</button></div>';
+  if (!d) { $('#main').innerHTML = h + '<div class="card"><div class="empty2">아직 사양서가 없어요 · ‘+ 새 사양서’를 눌러 시작해요</div></div>'; bindDoc(); return; }
+  h += '<div class="card"><div class="f"><label>파일명</label><input id="dName" value="' + esc(d.name) + '"></div><div class="nt">' + d.rows.length + '행 · 만든 날 ' + d.date + '</div></div>';
+  d.rows.forEach(function (r, i) {
+    var o = OPEN[r.id];
+    h += '<div class="card rw dr"><div class="rh drh" data-open="' + r.id + '"><b><em class="no">' + (i + 1) + '</em>' + esc(r.item || '(이름 없음)') + '</b><small>' + esc([r.set, r.size, r.pg, r.paper].filter(Boolean).join(' · ')) + '</small></div>';
+    if (o) {
+      h += DF.map(function (f) { return '<label class="fr"><span>' + f[1] + '</span><input data-dr="' + r.id + '" data-k="' + f[0] + '" value="' + esc(r[f[0]] || '') + '"' + (f[2] ? ' list="' + f[2] + '"' : '') + '></label>'; }).join('');
+      if (r.flat && !r.book) h += '<label class="fr"><span>결</span><select data-dr="' + r.id + '" data-k="gn">' + ['', 'v', 'h'].map(function (g) { return '<option value="' + g + '"' + ((r.gn || '') === g ? ' selected' : '') + '>' + GN_LB[g] + '</option>'; }).join('') + '</select></label>';
+      h += sheetHint(r, { q: +String(r.q).replace(/[^\d]/g, '') || 0, k: 1 });
+      h += '<div class="racts"><button data-mv="' + r.id + '" data-d="-1">↑</button><button data-mv="' + r.id + '" data-d="1">↓</button><button data-dup="' + r.id + '">복제</button><button data-del="' + r.id + '" class="del">삭제</button></div>';
+    } else h += sheetHint(r, { q: +String(r.q).replace(/[^\d]/g, '') || 0, k: 1 });
+    h += '</div>';
+  });
+  h += '<div class="acts"><button class="sv" id="dAdd">+ 대표 품목에서 추가</button><button class="rs" id="dBlank">+ 빈 행</button></div>';
+  h += '<button class="cp" id="dCopy">MASTER 양식으로 복사 (' + d.rows.length + '행)</button><div class="nt c">사양서 시트의 ‘대분류’ 첫 칸을 누르고 붙여넣으면 칸마다 들어가요 · 헤더 포함은 아래 버튼</div>';
+  h += '<div class="acts"><button class="rs" id="dCopyH">헤더 포함 복사</button><button class="rs del" id="dDel">이 사양서 삭제</button></div>';
+  $('#main').innerHTML = h; bindDoc();
+}
+function bindDoc() {
+  var d = curDoc();
+  $$('[data-doc]').forEach(function (b) { b.onclick = function () { ls.set('pr:doc', b.dataset.doc); renderDoc(); }; });
+  $('#dNew').onclick = function () { newDoc(); renderDoc(); setTimeout(function () { var n = $('#dName'); if (n) { n.focus(); n.select(); } }, 50); };
+  if (!d) return;
+  $('#dName').onchange = function () { d.name = this.value.trim() || d.name; saveDocs(); renderDoc(); };
+  $$('[data-open]').forEach(function (e) { e.onclick = function () { OPEN[e.dataset.open] = !OPEN[e.dataset.open]; renderDoc(); }; });
+  var row = function (id) { return d.rows.filter(function (r) { return r.id === id; })[0]; };
+  $$('[data-dr]').forEach(function (i) { i.onchange = function () { var r = row(i.dataset.dr); r[i.dataset.k] = i.value; saveDocs(); if (/^(gn|q|item|set|size|pg|paper)$/.test(i.dataset.k)) renderDoc(); }; });
+  $$('[data-mv]').forEach(function (b) { b.onclick = function () { var i = d.rows.indexOf(row(b.dataset.mv)), j = i + +b.dataset.d; if (j < 0 || j >= d.rows.length) return; var t = d.rows[i]; d.rows[i] = d.rows[j]; d.rows[j] = t; saveDocs(); renderDoc(); }; });
+  $$('[data-dup]').forEach(function (b) { b.onclick = function () { var r = row(b.dataset.dup), c = JSON.parse(JSON.stringify(r)); c.id = uid(); d.rows.splice(d.rows.indexOf(r) + 1, 0, c); OPEN[c.id] = true; saveDocs(); renderDoc(); }; });
+  $$('[data-del]').forEach(function (b) { b.onclick = function () { var r = row(b.dataset.del); if (!confirm('‘' + (r.item || '이 행') + '’ 행을 지울까요?')) return; d.rows.splice(d.rows.indexOf(r), 1); saveDocs(); renderDoc(); }; });
+  $('#dAdd').onclick = function () { S.add = true; go('list'); };
+  $('#dBlank').onclick = function () { var r = { id: uid(), cat: '', set: '', item: '', q: '', gift: '', size: '', pg: '', paper: '', print: '', coat: '-', fin: '-', cut: '', bind: '-', pack: '', etc: '' }; d.rows.push(r); OPEN[r.id] = true; saveDocs(); renderDoc(); };
+  $('#dCopy').onclick = function () { copyText(d.rows.map(rowTsv).join('\n'), d.rows.length + '행 복사했어요'); };
+  $('#dCopyH').onclick = function () { copyText([MASTER.join('\t')].concat(d.rows.map(rowTsv)).join('\n'), '헤더 포함 복사했어요'); };
+  $('#dDel').onclick = function () { if (!confirm('‘' + d.name + '’ 사양서를 지울까요? 되돌릴 수 없어요')) return; DOCS.splice(DOCS.indexOf(d), 1); ls.set('pr:doc', DOCS[0] ? DOCS[0].id : ''); saveDocs(); renderDoc(); };
+}
+
+/* ── 자료 (카탈로그 탭별 보기) ── */
+var REF = [['P', '용지'], ['PRINT', '인쇄'], ['FOIL', '박'], ['COAT', '코팅'], ['POST', '후가공'], ['BIND', '제본'], ['PART', '부속'], ['PACK', '포장'], ['GRAIN', '결·책등'], ['FIX', '교정']];
+function renderRef() {
+  var k = ls.get('pr:ref') || 'P', h = '<div class="phd"><b>자료</b><small>' + (CAT.url ? '<a href="' + esc(CAT.url) + '" target="_blank" rel="noopener">PROOF 사양 카탈로그 시트</a>와 같아요 · 시트에서 고치면 반영' : '사양 카탈로그') + '</small></div>';
+  h += '<div class="chips rtab">' + REF.map(function (r) { return '<button data-ref="' + r[0] + '"' + (r[0] === k ? ' class="on"' : '') + '>' + r[1] + '</button>'; }).join('') + '</div>';
+  var grp = function (rows, gi) { var o = {}, order = []; rows.forEach(function (r) { if (!o[r[gi]]) { o[r[gi]] = []; order.push(r[gi]); } o[r[gi]].push(r); }); return order.map(function (g) { return [g, o[g]]; }); };
+  if (k === 'P') {
+    grp(CAT.P, 0).forEach(function (g) {
+      h += '<div class="card"><div class="ct">' + esc(g[0]) + '</div><div class="pl">' + grp(g[1], 1).map(function (n) {
+        var r0 = n[1][0], code = paperLabel(r0).replace(/ \/.*$/, '');
+        return '<div class="pi"><div class="pn"><b>' + esc(n[0]) + '</b>' + (r0[6] ? '<em>' + esc(r0[6]) + '</em>' : '') + '<small>' + esc(r0[2]) + (r0[7] ? ' · ' + esc(r0[7]) : '') + '</small></div><div class="gs">' +
+          n[1].map(function (r) { return r[3] ? '<button data-cp="' + esc(paperLabel(r)) + '"><b>' + r[3] + '<i>g</i></b>' + (r[4] ? '<small>' + r[4] + '㎛' + (/추정/.test(r[5]) ? '~' : '') + '</small>' : '') + '</button>' : '<button data-cp="' + esc(paperLabel(r)) + '"><b>' + (r[4] ? r[4] / 1000 + '<i>mm</i>' : '규격') + '</b></button>'; }).join('') + '</div>' +
+          (n[0] === '매직칼라' && CAT.COLORS ? '<details class="cols"><summary>색 ' + CAT.COLORS['매직칼라'].length + '가지 보기</summary><div class="chips">' + CAT.COLORS['매직칼라'].map(function (c) { return '<button data-cp="' + esc(paperLabel(r0, c)) + '">' + esc(c) + '</button>'; }).join('') + '</div></details>' : '') + (n[1].some(function (r) { return r[8]; }) ? '<div class="nt">' + esc(n[1].filter(function (r) { return r[8]; })[0][8]) + '</div>' : '') + '</div>';
+      }).join('') + '</div></div>';
+    });
+  } else if (k === 'GRAIN') {
+    h += '<div class="card"><div class="ct">종이 결</div><p class="tx"><b>종목(T목)</b> = 결이 전지의 긴 변과 같은 방향 · <b>횡목(Y목)</b> = 짧은 변과 같은 방향.<br><br>' +
+      '· <b>책 내지·표지</b>: 결이 책등과 같은 방향(세로결)이어야 잘 펴지고 물결이 안 생겨요.<br>· <b>접는 선·오시</b>: 결과 같은 방향으로 접어야 덜 터져요 (아코디언·슬리브·접지 포스터).<br>· <b>엽서·카드</b>: 상관없지만 길쭉하면 긴 변 방향 결이 덜 휘어요.<br><br>' +
+      '절수 탭에서 결을 고르면 46전·국전을 종목/횡목으로 나눠서, 결이 맞는 방향으로만 배치해요. 실제 재고 결은 인쇄소에 꼭 확인하세요.</p></div>';
+    h += '<div class="card"><div class="ct">책등 계산법</div><p class="tx">무선·PUR 책등 = <b>본문 장수(쪽수 ÷ 2) × 본문 한 장 두께</b> + 표지 두께 × 2, 0.5mm 단위로 반올림.<br>예) 모조 120g(140㎛) 200쪽 → 100장 × 0.14 = 14mm + 스노우 250g 0.25 × 2 = 14.5mm<br><br>양장은 본문 + 면지 두께로 책등을 구하고, 책등 보드는 4mm 크게 · 보드 사이 홈 10mm 정도.<br><br>같은 평량도 제지사·지종마다 두께가 달라요. 정확한 값은 제지사 두께표나 가제본으로 확인.</p></div>';
+  } else if (k === 'FIX') {
+    h += '<div class="nt" style="margin:0 4px 10px">지난 사양서에서 찾은 오타·표기 불일치예요. 원본 파일은 고치지 않았어요.</div>';
+    grp(CAT.FIX || [], 0).forEach(function (g) {
+      h += '<div class="card"><div class="ct">' + esc(g[0]) + '<small>' + g[1].length + '</small></div>' + g[1].map(function (r) { return '<div class="fx"><small>' + esc(r[1]) + '</small><s>' + esc(r[2]) + '</s><b>→ ' + esc(r[3]) + '</b></div>'; }).join('') + '</div>';
+    });
+  } else {
+    grp(CAT[k] || [], 0).forEach(function (g) {
+      h += '<div class="card"><div class="ct">' + esc(g[0]) + '</div>' + g[1].map(function (r) { return '<div class="ref" data-cp="' + esc(r[2]) + '"><b>' + esc(r[2]) + '</b>' + (r[3] ? '<small>' + esc(r[3]) + '</small>' : '') + '</div>'; }).join('') + '</div>';
+    });
+    }
+  if (k !== 'GRAIN' && k !== 'FIX') h += '<div class="nt c">' + (k === 'P' ? '평량이 기본 · 작은 숫자는 두께(㎛, ~는 추정) 참고용 · ' : '') + '누르면 표준 표기가 복사돼요</div>';
+  $('#main').innerHTML = h;
+  $$('[data-ref]').forEach(function (b) { b.onclick = function () { ls.set('pr:ref', b.dataset.ref); renderRef(); }; });
+  $$('[data-cp]').forEach(function (b) { b.onclick = function () { copyText(b.dataset.cp, '‘' + b.dataset.cp + '’ 복사했어요'); }; });
+}
+
+/* ───── 전개도 (2026.10.06) ─────
+   형태 고르고 크기 넣으면 → 대략 전개도 SVG (재단선 실선 / 접는선 점선) + 절수 + 일러스트용 SVG 저장
+   * 대략 도면이에요. 실제 목형은 박스·제본 업체 도면으로 확인 */
+var DIE = [
+  { id: 'sleeve', n: '슬리브', d: '양옆이 뚫린 띠 형태', in: { X: 150, Y: 210, D: 10, g: 15 } },
+  { id: 'rte', n: '단상자 (꽂이형)', d: '위아래 꽂이 뚜껑 · 지기 RTE', in: { L: 100, D: 40, H: 150, g: 15, t: 15 } },
+  { id: 'mailer', n: 'G형 박스 (날개 꽂이)', d: '시즌그리팅 아웃박스 · 뚜껑 앞쪽 꽂이', in: { L: 220, W: 310, H: 40, t: 20 } },
+  { id: 'sabari', n: '싸바리 싸개지', d: '상짝·하짝 한 장씩 · 보드 겉에 감싸기', in: { L: 200, W: 270, H: 50, bd: 2, wr: 15 } },
+  { id: 'hard', n: '하드커버 싸개', d: '양장 표지 · 보드 3장 + 홈', in: { w: 148, h: 210, sp: 15, bd: 2, jt: 10, wr: 20 } },
+  { id: 'cover', n: '무선 책 표지', d: '앞·뒤 + 책등 (+ 날개)', in: { w: 148, h: 210, sp: 10, fl: 0, bl: 3 } },
+  { id: 'env', n: '봉투', d: '내용물 기준 · 옆날개 + 아래 + 뚜껑', in: { w: 100, h: 150, mg: 4, fl: 15, lid: 35 } }
+];
+var DIE_LB = { X: ['정면 가로', 'mm'], Y: ['높이', 'mm'], D: ['폭(옆면)', 'mm'], g: ['풀칠날개', 'mm'], L: ['가로(L)', 'mm'], W: ['세로(W)', 'mm'], H: ['높이(H)', 'mm'], t: ['꽂이날개', 'mm'],
+  bd: ['보드 두께', 'mm'], wr: ['접어넣기', 'mm'], w: ['가로', 'mm'], h: ['세로', 'mm'], sp: ['책등', 'mm'], jt: ['홈', 'mm'], fl: ['날개', 'mm'], bl: ['도련', 'mm'], mg: ['여유(한쪽)', 'mm'], lid: ['뚜껑', 'mm'] };
+
+// 도형: c=[[x1,y1,x2,y2],...] 재단선 / f=접는선 / t=치수 글자 [x,y,'글']
+function dieGeom(id, v) {
+  var c = [], f = [], t = [], W, H;
+  function rect(x, y, w, h, arr) { arr.push([x, y, x + w, y], [x + w, y, x + w, y + h], [x + w, y + h, x, y + h], [x, y + h, x, y]); }
+  function poly(pts, arr) { for (var i = 0; i < pts.length; i++) { var a = pts[i], b = pts[(i + 1) % pts.length]; arr.push([a[0], a[1], b[0], b[1]]); } }
+  function open(pts, arr) { for (var i = 0; i + 1 < pts.length; i++) arr.push([pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1]]); }
+  function vf(x, y1, y2) { f.push([x, y1, x, y2]); } function hf(y, x1, x2) { f.push([x1, y, x2, y]); }
+  if (id === 'sleeve') {
+    var X = +v.X, Y = +v.Y, D = +v.D, g = +v.g; W = g + 2 * X + 2 * D; H = Y;
+    poly([[0, 4], [g, 0], [W, 0], [W, H], [g, H], [0, H - 4]], c);
+    [g, g + X, g + X + D, g + 2 * X + D].forEach(function (x) { vf(x, 0, H); });
+    t.push([g + X / 2, H / 2, '앞 ' + X], [g + X + D / 2, H / 2, D], [g + X + D + X / 2, H / 2, '뒤 ' + X], [g + 2 * X + D + D / 2, H / 2, D]);
+  } else if (id === 'rte') {
+    var L = +v.L, D = +v.D, Hh = +v.H, g = +v.g, tk = +v.t, y0 = D + tk; W = g + 2 * L + 2 * D; H = Hh + 2 * (D + tk);
+    var yb = y0 + Hh, xs = [g, g + L, g + L + D, g + 2 * L + D, g + 2 * L + 2 * D], dh = Math.min(D * 0.8, L / 2);
+    open([[g, y0], [0, y0 + 4], [0, yb - 4], [g, yb]], c);
+    open([[xs[0], y0], [xs[0], tk], [xs[0] + 3, 0], [xs[1] - 3, 0], [xs[1], tk], [xs[1], y0]], c); hf(y0, xs[0], xs[1]); hf(tk, xs[0], xs[1]);
+    open([[xs[2], yb], [xs[2], yb + D], [xs[2] + 3, H], [xs[3] - 3, H], [xs[3], yb + D], [xs[3], yb]], c); hf(yb, xs[2], xs[3]); hf(yb + D, xs[2], xs[3]);
+    [[xs[1], xs[2]], [xs[3], xs[4]]].forEach(function (p) {
+      open([[p[0], y0], [p[0] + 2, y0 - dh], [p[1] - 4, y0 - dh], [p[1], y0 - 4], [p[1], y0]], c); hf(y0, p[0], p[1]);
+      open([[p[0], yb], [p[0] + 2, yb + dh], [p[1] - 4, yb + dh], [p[1], yb + 4], [p[1], yb]], c); hf(yb, p[0], p[1]);
+    });
+    c.push([xs[2], y0, xs[3], y0], [xs[0], yb, xs[1], yb], [xs[4], y0, xs[4], yb]);
+    [xs[0], xs[1], xs[2], xs[3]].forEach(function (x) { vf(x, y0, yb); });
+    t.push([xs[0] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[1] + D / 2, y0 + Hh / 2, D], [xs[2] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[3] + D / 2, y0 + Hh / 2, D], [xs[0] + L / 2, y0 + Hh / 2 + 12, 'H ' + Hh], [xs[0] + L / 2, tk + D / 2, '뚜껑'], [xs[2] + L / 2, yb + D / 2, '뚜껑']);
+  } else if (id === 'mailer') {
+    // 바닥 L×W 가운데, 옆벽은 두겹(H+H), 앞벽 두겹, 뒷벽 H, 뚜껑 W + 앞날개 H + 꽂이
+    var L = +v.L, Wd = +v.W, Hh = +v.H, tk = +v.t; W = L + 4 * Hh; H = 2 * Hh + Wd + Hh + Wd + Hh + tk;
+    var bx = 2 * Hh, by = 2 * Hh + tk + Hh; // 위에서부터: 꽂이, 뚜껑앞날개(H), 뚜껑(W), 뒷벽(H), 바닥(W), 앞벽(H), 앞벽 안쪽(H)
+    var yLidT = 0, yLidF = tk, yLid = tk + Hh, yBack = yLid + Wd, yBase = yBack + Hh, yFront = yBase + Wd, yIn = yFront + Hh, yEnd = yIn + Hh;
+    H = yEnd;
+    // 가운데 기둥
+    poly([[bx + 4, yLidT], [bx + L - 4, yLidT], [bx + L, yLidF], [bx + L, yBack], [bx + L + Hh, yBack], [bx + L + Hh, yBase], [bx + L + 2 * Hh, yBase], [bx + L + 2 * Hh, yFront], [bx + L + Hh, yFront], [bx + L + Hh - 2, yFront + Hh - 2], [bx + L, yFront + Hh - 2], [bx + L, yEnd], [bx, yEnd], [bx, yFront + Hh - 2], [bx - Hh + 2, yFront + Hh - 2], [bx - Hh, yFront], [bx - 2 * Hh, yFront], [bx - 2 * Hh, yBase], [bx - Hh, yBase], [bx - Hh, yBack], [bx, yBack], [bx, yLidF]], c);
+    hf(yLidF, bx, bx + L); hf(yLid, bx, bx + L); hf(yBack, bx, bx + L); hf(yBase, bx - Hh, bx + L + Hh); hf(yFront, bx, bx + L); hf(yIn, bx, bx + L);
+    vf(bx, yBase, yFront); vf(bx + L, yBase, yFront); vf(bx - Hh, yBase, yFront); vf(bx + L + Hh, yBase, yFront);
+    vf(bx, yBack, yBase); vf(bx + L, yBack, yBase);
+    t.push([bx + L / 2, yBase + Wd / 2, '바닥 ' + L + '×' + Wd], [bx + L / 2, yLid + Wd / 2, '뚜껑'], [bx + L / 2, yBack + Hh / 2, '뒷벽 ' + Hh], [bx + L / 2, yFront + Hh / 2, '앞벽'], [bx - Hh, yBase + Wd / 2, '옆벽']);
+  } else if (id === 'sabari') {
+    var t2 = +v.bd, oL = +v.L + 2 * t2, oW = +v.W + 2 * t2, oH = +v.H + t2, wr = +v.wr, s = oH + wr; W = oL + 2 * s; H = oW + 2 * s;
+    poly([[s, 0], [s + oL, 0], [s + oL, s - 3], [W, s - 3], [W, s + oW + 3], [s + oL, s + oW + 3], [s + oL, H], [s, H], [s, s + oW + 3], [0, s + oW + 3], [0, s - 3], [s, s - 3]], c);
+    rect(s, s, oL, oW, f); hf(wr, s, s + oL); hf(H - wr, s, s + oL); vf(wr, s, s + oW); vf(W - wr, s, s + oW);
+    t.push([W / 2, H / 2, '바닥 ' + oL + '×' + oW], [W / 2, s / 2 + wr / 2, '벽 ' + oH], [W / 2, wr / 2, '접어넣기 ' + wr]);
+  } else if (id === 'hard') {
+    var bw = +v.w - 4, bh = +v.h + 7, sw = +v.sp + 4, jt = +v.jt, wr = +v.wr; W = 2 * bw + sw + 2 * jt + 2 * wr; H = bh + 2 * wr;
+    var k = wr * 0.6; poly([[k, 0], [W - k, 0], [W, k], [W, H - k], [W - k, H], [k, H], [0, H - k], [0, k]], c);
+    var x = wr; rect(x, wr, bw, bh, f); x += bw + jt; rect(x, wr, sw, bh, f); x += sw + jt; rect(x, wr, bw, bh, f);
+    t.push([wr + bw / 2, H / 2, '뒤 보드 ' + bw + '×' + bh], [wr + bw + jt + sw / 2, H / 2 - 8, '책등'], [wr + bw + jt + sw / 2, H / 2, sw], [W - wr - bw / 2, H / 2, '앞 보드']);
+  } else if (id === 'cover') {
+    var bl = +v.bl, w = +v.w, h = +v.h, sp = +v.sp, fl = +v.fl; W = 2 * w + sp + 2 * fl + 2 * bl; H = h + 2 * bl;
+    rect(0, 0, W, H, c); var x = bl;
+    if (fl) { x += fl; vf(x, 0, H); }
+    x += w; vf(x, 0, H); x += sp; vf(x, 0, H); x += w; if (fl) vf(x, 0, H);
+    f.push([bl, bl, W - bl, bl], [W - bl, bl, W - bl, H - bl], [W - bl, H - bl, bl, H - bl], [bl, H - bl, bl, bl]);
+    t.push([bl + fl + w / 2, H / 2, '뒤 ' + w], [bl + fl + w + sp / 2, H / 2, sp], [bl + fl + w + sp + w / 2, H / 2, '앞 ' + w]);
+  } else if (id === 'env') {
+    var Wv = +v.w + 2 * +v.mg, Hv = +v.h + 2 * +v.mg, fl = +v.fl, lid = +v.lid, bot = Math.round(Hv * 0.6); W = Wv + 2 * fl; H = lid + Hv + bot;
+    poly([[fl + 6, 0], [fl + Wv - 6, 0], [fl + Wv, lid], [W, lid + 8], [W, lid + Hv - 8], [fl + Wv, lid + Hv], [fl + Wv - 4, H], [fl + 4, H], [fl, lid + Hv], [0, lid + Hv - 8], [0, lid + 8], [fl, lid]], c);
+    rect(fl, lid, Wv, Hv, f);
+    t.push([W / 2, lid + Hv / 2, '앞면 ' + Wv + '×' + Hv], [W / 2, lid / 2, '뚜껑']);
+  }
+  return { c: c, f: f, t: t, W: W, H: H };
+}
+function dieSvg(G, forFile) {
+  var pad = forFile ? 10 : 14, VW = G.W + 2 * pad, VH = G.H + 2 * pad, sw = forFile ? 0.25 : Math.max(VW, VH) / 400;
+  var ln = function (a, st) { return '<line x1="' + r1(a[0] + pad) + '" y1="' + r1(a[1] + pad) + '" x2="' + r1(a[2] + pad) + '" y2="' + r1(a[3] + pad) + '"' + st + '/>'; };
+  var fs = Math.max(4, Math.min(G.W, G.H) / 18);
+  var s = '<svg xmlns="http://www.w3.org/2000/svg" ' + (forFile ? 'width="' + r1(VW) + 'mm" height="' + r1(VH) + 'mm" ' : 'class="dsv" ') + 'viewBox="0 0 ' + r1(VW) + ' ' + r1(VH) + '">';
+  s += '<g id="CUT" fill="none" stroke="#e5243b" stroke-width="' + sw + '">' + G.c.map(function (a) { return ln(a, ''); }).join('') + '</g>';
+  s += '<g id="FOLD" fill="none" stroke="#0067d8" stroke-width="' + sw + '" stroke-dasharray="' + (sw * 8) + ' ' + (sw * 5) + '">' + G.f.map(function (a) { return ln(a, ''); }).join('') + '</g>';
+  s += '<g id="TEXT" fill="#8b95a1" font-family="sans-serif" font-size="' + r1(fs) + '" text-anchor="middle">' + G.t.map(function (a) { return '<text x="' + r1(a[0] + pad) + '" y="' + r1(a[1] + pad) + '">' + esc(a[2]) + '</text>'; }).join('') + '</g>';
+  return s + '</svg>';
+}
+var DS = (function () { var o = {}; try { o = JSON.parse(ls.get('pr:die') || '{}'); } catch (e) {} return o; })();
+function dieState() { DS.id = DS.id || 'mailer'; var d = DIE.filter(function (x) { return x.id === DS.id; })[0] || DIE[0]; DS.v = DS.v && DS.vid === d.id ? DS.v : JSON.parse(JSON.stringify(d.in)); DS.vid = d.id; return d; }
+function renderDie() {
+  var d = dieState();
+  var h = '<div class="phd"><b>전개도</b><small>형태 고르고 크기 넣으면 대략 전개도 · 절수 · 일러스트용 파일</small></div>';
+  h += '<div class="card"><div class="ct">사진으로 형태 추정<small>AI</small></div><div class="nt" style="margin:0 0 10px">비슷한 박스·책 사진을 올리면 형태와 대략 크기를 골라 줘요 (루틴 PIN 필요)</div><label class="cpy" style="display:block;text-align:center;margin:0">사진 고르기<input type="file" accept="image/*" id="dieImg" hidden></label><div id="dieAi" class="nt"></div></div>';
+  h += '<div class="chips" style="margin:0 0 12px">' + DIE.map(function (x) { return '<button data-die="' + x.id + '"' + (x.id === d.id ? ' class="on"' : '') + '>' + x.n + '</button>'; }).join('') + '</div>';
+  h += '<div class="card"><div class="ct">' + d.n + '<small>' + d.d + '</small></div><div class="ig">' + Object.keys(DS.v).map(function (k) {
+    var L = DIE_LB[k] || [k, '']; return '<div class="f"><label>' + L[0] + ' <i>' + L[1] + '</i></label><input type="number" inputmode="decimal" step="any" data-dv="' + k + '" value="' + DS.v[k] + '"></div>';
+  }).join('') + '</div></div><div id="dieOut"></div>';
+  $('#main').innerHTML = h; dieOut();
+  $$('[data-die]').forEach(function (b) { b.onclick = function () { DS.id = b.dataset.die; DS.v = null; ls.set('pr:die', JSON.stringify(DS)); renderDie(); }; });
+  $$('[data-dv]').forEach(function (i) { i.oninput = function () { DS.v[i.dataset.dv] = i.value === '' ? 0 : +i.value; ls.set('pr:die', JSON.stringify(DS)); dieOut(); }; });
+  $('#dieImg').onchange = function () { var f = this.files[0]; if (f) dieAI(f); this.value = ''; };
+}
+function dieOut() {
+  var d = dieState(), G = dieGeom(d.id, DS.v), bs = bestSheet(G.W, G.H, false);
+  var h = '<div class="card"><div class="ct">대략 전개도<small>' + mm(G.W) + ' × ' + mm(G.H) + 'mm</small></div>' + dieSvg(G, false) +
+    '<div class="legend"><span><b style="color:#e5243b">━</b> 재단선</span><span><b style="color:#0067d8">┅</b> 접는선(오시)</span></div>';
+  if (bs) h += '<div class="sh"><b>' + bs.P.n + '</b> ' + bs.n + '개 걸이 · 로스 ' + Math.round(bs.loss * 100) + '% (도련 ' + MAR.bl + ' · 물림 ' + MAR.gr + ' · 여백 ' + MAR.sd + 'mm 기준)</div>';
+  else h += '<div class="cwarn">46전지보다 커서 한 장에 안 들어가요 · 나눠서 합지하거나 업체와 상의</div>';
+  h += '<button class="cp" id="dieSave" style="margin-top:12px">일러스트용 SVG 저장 (mm 실측)</button><div class="nt c">일러스트에서 열면 CUT · FOLD · TEXT 그룹으로 나뉘어 있어요 · 실제 목형은 업체 도면으로 확인</div></div>';
+  $('#dieOut').innerHTML = h;
+  $('#dieSave').onclick = function () {
+    var blob = new Blob([dieSvg(G, true)], { type: 'image/svg+xml' }), a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'PROOF_' + d.n.replace(/[^\w가-힣]+/g, '') + '_' + mm(G.W) + 'x' + mm(G.H) + '.svg'; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  };
+}
+/* 사진 → 형태·크기 추정 (루틴 GAS의 Gemini 사용) */
+var API = 'https://script.google.com/macros/s/AKfycbwFtL_qIuUMOxdD5wzj6Eltc67OTIScR4yJjMZWxLyPzn8K7Y5JhOBTDlf4wp9Av6lqSQ/exec';
+function gas(fn) { var args = Array.prototype.slice.call(arguments, 1); return fetch(API, { method: 'POST', body: JSON.stringify({ api: fn, args: args }) }).then(function (r) { return r.json(); }).then(function (o) { if (!o || !o.ok) throw new Error((o && o.error) || '서버 오류'); return o.data; }); }
+function dieAI(file) {
+  var pin = ls.get('pr:pin');
+  if (!pin) { pin = prompt('루틴 앱 PIN 4자리'); if (!pin) return; }
+  var box = $('#dieAi'); box.textContent = '사진 보는 중…';
+  var img = new Image(), url = URL.createObjectURL(file);
+  img.onload = function () {
+    var k = Math.min(1, 1280 / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = img.width * k; cv.height = img.height * k;
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+    var b64 = cv.toDataURL('image/jpeg', 0.85).split(',')[1];
+    gas('appProofAI', pin, b64, 'image/jpeg', DIE.map(function (x) { return x.id + '=' + x.n; }).join(', ')).then(function (r) {
+      ls.set('pr:pin', pin);
+      var d = DIE.filter(function (x) { return x.id === r.form; })[0];
+      if (!d) { box.textContent = r.reason || '형태를 못 알아봤어요'; return; }
+      DS.id = d.id; DS.v = JSON.parse(JSON.stringify(d.in)); DS.vid = d.id;
+      Object.keys(r.size || {}).forEach(function (k) { if (k in DS.v && +r.size[k] > 0) DS.v[k] = +r.size[k]; });
+      ls.set('pr:die', JSON.stringify(DS)); renderDie(); $('#dieAi').textContent = d.n + ' 같아요 · ' + (r.reason || '') + ' (크기는 추정이라 실측으로 고쳐 주세요)';
+    }).catch(function (e) { if (/PIN/.test(e.message)) ls.set('pr:pin', ''); box.textContent = e.message; });
+  };
+  img.src = url;
+}
+
+/* ── 시작 ── */
+var LINKS = { doc: ['https://drive.google.com/drive/folders/11nRHl1v00YxiSLaQyQy07cUN8hq8rbY8', '사양서 폴더'], folder: ['https://drive.google.com/drive/folders/1N8iiljha71_Yn7jXVvhiFJ0qNgtwP7mF', 'PROOF 폴더'] };
+function setLink() { var v = S.view === 'one' ? 'list' : S.view, L = v === 'doc' ? LINKS.doc : (v === 'list' || v === 'ref') && CAT.url ? [CAT.url, 'PROOF 사양 카탈로그 시트'] : LINKS.folder; var a = $('#lnk'); a.href = L[0]; a.title = L[1] + ' 열기'; }
+var _render = render; render = function () { _render(); setLink(); };
+$$('#nav button').forEach(function (b) { b.onclick = function () { S.add = false; go(b.dataset.v); }; });
+$('#brand').onclick = function () { S.add = false; go('doc'); };
+fillLists();
+render();
+loadCat();
 </script>
 </body>
 </html>
