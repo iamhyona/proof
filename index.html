@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>SPEC</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SPEC">
+<meta name="theme-color" content="#f2f4f6">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root { --bg:#f2f4f6; --card:#fff; --line:#e5e8eb; --txt:#191f28; --sub:#4e5968; --mute:#8b95a1; --faint:#b0b8c1; --acc:#3182f6; --red:#ef4444; --chip:#f2f4f6; }
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { margin:0; background:var(--bg); color:var(--txt); font-family:'Pretendard Variable',Pretendard,-apple-system,sans-serif; font-size:15px; letter-spacing:-0.01em; }
+button,input,select,textarea { font:inherit; color:inherit; letter-spacing:inherit; }
+button { cursor:pointer; }
+header { position:sticky; top:0; z-index:10; background:var(--bg); padding:calc(10px + env(safe-area-inset-top)) 16px 0; }
+.hd { display:flex; align-items:center; justify-content:space-between; height:44px; max-width:560px; margin:0 auto; }
+.brand { border:0; background:none; padding:0; font-size:17px; font-weight:800; letter-spacing:.06em; }
+.hdt { font-size:12px; color:var(--mute); font-weight:600; }
+nav { display:flex; gap:20px; max-width:560px; margin:6px auto 0; border-bottom:1px solid var(--line); }
+nav button { border:0; background:none; padding:12px 0 10px; font-size:12px; font-weight:700; letter-spacing:.03em; color:var(--faint); border-bottom:2px solid transparent; margin-bottom:-1px; }
+nav button.on { color:var(--txt); border-bottom-color:var(--txt); }
+main { max-width:560px; margin:0 auto; padding:14px 16px calc(80px + env(safe-area-inset-bottom)); }
+.card { background:var(--card); border-radius:20px; padding:20px 18px; margin-bottom:12px; }
+.ct { font-size:16px; font-weight:700; margin:0 0 14px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.ct small { font-size:13px; font-weight:500; color:var(--mute); }
+.sec { font-size:13px; font-weight:800; color:var(--sub); margin:20px 4px 10px; display:flex; gap:8px; align-items:baseline; } .sec small { font-weight:600; color:var(--mute); }
+.empty2 { text-align:center; color:var(--mute); padding:18px 0; font-size:14px; }
+.legend { display:flex; gap:10px; flex-wrap:wrap; font-size:12px; color:var(--mute); margin-top:8px; }
+.dn { color:var(--red); }
+.phd { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:6px 4px 14px; } .phd b { font-size:20px; font-weight:800; } .phd small { width:100%; color:var(--mute); font-size:13px; font-weight:600; }
+.bk { width:34px; height:34px; border-radius:50%; border:0; background:#fff; font-size:18px; color:var(--sub); }
+.seg { display:flex; background:#e5e8eb; border-radius:12px; padding:3px; margin:0 0 12px; }
+.seg button { flex:1; border:0; background:none; border-radius:9px; padding:8px 0; font-size:14px; font-weight:700; color:var(--mute); }
+.seg button.on { background:#fff; color:var(--txt); box-shadow:0 1px 3px rgba(0,0,0,.08); }
+.chips { display:flex; flex-wrap:wrap; gap:6px; } .chips button { border:0; background:var(--chip); border-radius:999px; padding:8px 13px; font-size:14px; color:var(--sub); font-weight:500; } .chips button.on { background:var(--txt); color:#fff; }
+.frow { display:flex; gap:8px; margin-bottom:10px; }
+.f { flex:1; min-width:0; } .f label { display:block; font-size:12px; color:var(--mute); margin:0 0 5px 2px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .f label i { font-style:normal; font-weight:500; opacity:.8; }
+.f input, .f select { width:100%; border:0; background:var(--chip); border-radius:12px; padding:0 12px; outline:0; font-size:16px; height:46px; min-width:0; display:block; -webkit-appearance:none; appearance:none; }
+.ig { display:grid; grid-template-columns:repeat(3,1fr); gap:10px 8px; }
+.nt { margin-top:12px; font-size:12px; color:var(--mute); line-height:1.55; } .nt.c { text-align:center; margin:8px 0 0; }
+.tg { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.tg button { border:0; background:#fff; border-radius:16px; padding:16px 14px; text-align:left; display:flex; flex-direction:column; gap:4px; min-width:0; }
+.tg b { font-size:15px; } .tg small { font-size:12px; color:var(--mute); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cl { display:grid; grid-template-columns:auto 1fr; gap:10px 14px; margin:0; } .cl dt { font-size:13px; color:var(--mute); font-weight:600; } .cl dd { margin:0; font-size:15px; font-weight:700; text-align:right; }
+.rw .rh { margin:0 0 10px; } .rw .rh b { display:block; font-size:15px; } .rw .rh small { display:block; font-size:12px; color:var(--mute); margin-top:3px; line-height:1.45; }
+.fr { display:flex; align-items:center; gap:10px; border-top:1px solid var(--line); padding:6px 0; } .fr span { flex:none; width:7.4em; font-size:12px; color:var(--mute); font-weight:600; }
+.fr input { flex:1; min-width:0; border:0; background:none; font-size:14px; padding:8px 0; outline:0; text-align:right; } .fr input:focus { background:var(--chip); border-radius:8px; padding:8px; text-align:left; }
+.sh { margin-top:8px; background:var(--chip); border-radius:12px; padding:10px 12px; font-size:12px; color:var(--sub); line-height:1.5; } .sh b { color:var(--acc); }
+.cp { width:100%; border:0; border-radius:14px; background:var(--acc); color:#fff; font-weight:800; font-size:15px; padding:15px 0; margin-top:4px; }
+.acts { display:flex; gap:8px; margin-top:12px; } .acts button { flex:1; border:0; border-radius:12px; padding:12px 0; font-weight:700; font-size:14px; } .sv { background:var(--txt); color:#fff; } .rs { background:#fff; color:var(--sub); }
+.tt { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; } .tt div { background:var(--chip); border-radius:12px; padding:10px; } .tt small { display:block; font-size:11px; color:var(--mute); font-weight:600; } .tt b { font-size:17px; } .tt b i { font-style:normal; font-size:11px; color:var(--sub); margin-left:1px; }
+.tx { margin:0; font-size:14px; line-height:1.7; color:var(--sub); } .tx b { color:var(--txt); }
+#toast { position:fixed; left:50%; bottom:calc(30px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:rgba(25,31,40,.92); color:#fff; padding:11px 18px; border-radius:999px; font-size:14px; display:none; z-index:50; white-space:nowrap; }
+@media (max-width:380px) { .ig { grid-template-columns:1fr 1fr; } }
+.cpre { margin:0 0 12px; } .cpre button small { margin-left:5px; font-size:11px; opacity:.6; }
+.cres .ct span { display:flex; align-items:center; gap:6px; } .cbest { font-style:normal; font-size:11px; font-weight:800; color:#fff; background:var(--acc); border-radius:999px; padding:2px 7px; }
+.cres.best { box-shadow:inset 0 0 0 2px var(--acc); }
+.cst { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0 0 12px; } .cst > div { background:var(--chip); border-radius:14px; padding:12px 12px 10px; min-width:0; }
+.cst small { display:block; font-size:11px; color:var(--mute); font-weight:600; } .cst b { display:block; font-size:22px; font-weight:800; letter-spacing:-0.02em; margin-top:4px; white-space:nowrap; } .cst b i { font-style:normal; font-size:12px; color:var(--sub); margin:0 1px; font-weight:700; }
+.cst em { display:block; font-style:normal; font-size:11px; color:var(--mute); margin-top:2px; } .cst.sm { margin:12px 0 0; } .cst.sm b { font-size:18px; }
+.csv { display:block; width:100%; height:auto; margin:2px 0 6px; } .cds { font-size:12px; color:var(--mute); }
+.cwarn, .cok { margin-top:10px; font-size:13px; border-radius:12px; padding:10px 12px; line-height:1.5; } .cwarn { background:#fff4e5; color:#b45309; } .cok { background:#e8f7ee; color:#1f9d55; }
+.cpy { margin-top:12px; width:100%; border:0; border-radius:12px; background:var(--txt); color:#fff; font-weight:700; font-size:14px; padding:12px 0; }
+.cfit { margin-top:12px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; } .cfit small { width:100%; font-size:12px; color:var(--mute); font-weight:600; } .cfit button { border:0; background:var(--chip); border-radius:999px; padding:7px 12px; font-size:13px; font-weight:600; color:var(--sub); }
+.cset summary { list-style:none; cursor:pointer; margin:0; } .cset summary::-webkit-details-marker { display:none; }
+#cP button { font-size:13px; }
+.cst.c2 { grid-template-columns:1.6fr 1fr; }
+
+</style>
+</head>
+<body>
+<header>
+  <div class="hd"><button class="brand" id="brand">SPEC</button><span class="hdt">사양서 도우미</span></div>
+  <nav id="nav"><button data-v="list">품목</button><button data-v="calc">절수</button><button data-v="paper">용지</button></nav>
+</header>
+<main id="main"></main>
+<div id="toast"></div>
+<datalist id="papers"></datalist>
+<script>
+/* ───── CALC: 국전·46전 절수 · 판걸이 · 로스 계산 (2026.10.06) ─────
+   전지: 46전 788×1091 · 국전 636×939 (mm)
+   여유 기본값: 도련 사방 3mm · 물림 10mm(긴 변 쪽) · 나머지 여백 5mm — 인쇄소마다 달라서 고칠 수 있게 */
+var PAPERS = [{ k: '46', n: '46전', s: 788, l: 1091 }, { k: 'kuk', n: '국전', s: 636, l: 939 }];
+var PRESETS = [['국판', 148, 210], ['신국판', 152, 225], ['46판', 128, 188], ['크라운판', 176, 248], ['46배판', 188, 257], ['국배판(A4)', 210, 297],
+  ['B5', 182, 257], ['A3', 297, 420], ['엽서', 100, 148], ['포토카드', 55, 85], ['스티커 A6', 105, 148]];
+var CUTS = [2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64];
+function cq() {
+  var d = { t: 'book', m: 'size', w: 148, h: 210, p: 64, q: 500, sp: 8, fl: 0, cw: 148, ch: 210, bl: 3, gr: 10, sd: 5, ex: 5, paper: '46', cut: 16 };
+  try { var o = JSON.parse(ls.get('d4:calc') || 'null'); if (o) for (var k in o) d[k] = o[k]; } catch (e) {}
+  return d;
+}
+function cqSave(c) { try { ls.set('d4:calc', JSON.stringify(c)); } catch (e) {} }
+function pow2(n) { var p = 1; while (p * 2 <= n) p *= 2; return n >= 1 ? p : 0; }
+// 전지 한 장에 몇 개: 그대로 · 돌려서 · 섞어서(남는 띠에 돌려 넣기). 책자는 접지 때문에 가로·세로 2의 거듭제곱 격자만
+function fitSheet(P, iw, ih, c, book) {
+  var uL = P.l - 2 * c.sd, uS = P.s - c.gr - c.sd, best = { n: 0 };
+  if (iw <= 0 || ih <= 0 || uL <= 0 || uS <= 0) return best;
+  var put = function (n, rects, desc) { if (n > best.n) best = { n: n, rects: rects, desc: desc }; };
+  [[iw, ih], [ih, iw]].forEach(function (o, r) {
+    var a = o[0], b = o[1], cols = Math.floor(uL / a), rows = Math.floor(uS / b);
+    if (book) { cols = pow2(cols); rows = pow2(rows); }
+    var rects = []; for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) rects.push([i * a, j * b, a, b, r]);
+    put(cols * rows, rects, cols + '×' + rows + (r ? ' (돌려서)' : ''));
+    if (book) return;
+    // 아래쪽 남는 띠에 돌려서 더 넣기
+    for (var k = 0; k <= Math.floor(uS / b); k++) {
+      var rem = uS - k * b, c1 = Math.floor(uL / a), c2 = Math.floor(uL / b), r2 = Math.floor(rem / a), n = k * c1 + c2 * r2;
+      if (n > best.n && r2 > 0 && k > 0) {
+        var rs = []; for (i = 0; i < c1; i++) for (j = 0; j < k; j++) rs.push([i * a, j * b, a, b, r]);
+        for (i = 0; i < c2; i++) for (j = 0; j < r2; j++) rs.push([i * b, k * b + j * a, b, a, 1 - r]);
+        put(n, rs, c1 + '×' + k + ' + ' + c2 + '×' + r2 + ' 섞어서');
+      }
+    }
+    // 오른쪽 남는 띠에 돌려서 더 넣기
+    for (k = 0; k <= Math.floor(uL / a); k++) {
+      var remL = uL - k * a, r1 = Math.floor(uS / b), c3 = Math.floor(remL / b), r3 = Math.floor(uS / a), n2 = k * r1 + c3 * r3;
+      if (n2 > best.n && c3 > 0 && k > 0) {
+        var rs2 = []; for (i = 0; i < k; i++) for (j = 0; j < r1; j++) rs2.push([i * a, j * b, a, b, r]);
+        for (i = 0; i < c3; i++) for (j = 0; j < r3; j++) rs2.push([k * a + i * b, j * a, b, a, 1 - r]);
+        put(n2, rs2, k + '×' + r1 + ' + ' + c3 + '×' + r3 + ' 섞어서');
+      }
+    }
+  });
+  best.uL = uL; best.uS = uS;
+  return best;
+}
+// 표준 절 칸 크기 (긴 변부터 반씩, 3·6·12…절은 긴 변 3등분 후 반씩)
+function cutCell(P, n) {
+  var L = P.l, Sx = P.s, k = n;
+  if (n % 3 === 0) { L = L / 3; k = n / 3; if (L < Sx) { var t0 = L; L = Sx; Sx = t0; } }
+  while (k > 1) { L = L / 2; k /= 2; if (L < Sx) { var t = L; L = Sx; Sx = t; } }
+  return [Math.floor(Sx), Math.floor(L)];
+}
+function cutName(P, n) { return P.n + ' ' + n + '절'; }
+// 결과 그림: 전지 · 여백(물림) · 배치
+function sheetSvg(P, f, c) {
+  var W = P.l, H = P.s, sc = 300 / W, h = H * sc, s = '';
+  s += '<rect x="0" y="0" width="' + (W * sc).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="3" fill="#f2f4f6"/>';
+  s += '<rect x="0" y="' + ((H - c.gr) * sc).toFixed(1) + '" width="' + (W * sc).toFixed(1) + '" height="' + (c.gr * sc).toFixed(1) + '" fill="#fde2e2"/>';
+  (f.rects || []).forEach(function (r) {
+    s += '<rect x="' + ((c.sd + r[0]) * sc).toFixed(1) + '" y="' + ((c.sd + r[1]) * sc).toFixed(1) + '" width="' + (r[2] * sc - 0.8).toFixed(1) + '" height="' + (r[3] * sc - 0.8).toFixed(1) + '" rx="1.5" fill="' + (r[4] ? '#a5c8fb' : '#3182f6') + '" fill-opacity=".85"/>';
+  });
+  return '<svg class="csv" viewBox="0 0 300 ' + h.toFixed(1) + '">' + s + '</svg>';
+}
+function fmtN(v, d) { return (+v).toLocaleString(undefined, { maximumFractionDigits: d || 0 }); }
+function yeon(sheets) { return fmtN(sheets / 500, 2) + '연'; }
+// 한 품목(크기 → 전지별 결과) 계산
+function calcItem(fw, fh, c, book) {
+  // 책자는 접어서 붙어 있는 쪽끼리 도련을 나눠 쓰므로 쪽마다 도련 한 번, 낱장·전개도는 사방 도련
+  var bb = book ? +c.bl : 2 * c.bl, iw = fw + bb, ih = fh + bb;
+  return PAPERS.map(function (P) {
+    var f = fitSheet(P, iw, ih, c, book), use = f.n ? f.n * fw * fh / (P.s * P.l) : 0;
+    return { P: P, f: f, n: f.n, use: use, loss: 1 - use };
+  }).sort(function (a, b) { return (b.n ? 1 : 0) - (a.n ? 1 : 0) || a.loss - b.loss; });
+}
+function resCard(r, i, extra, spec) {
+  if (!r.n) return '<div class="card cres"><div class="ct">' + r.P.n + '<small>' + r.P.s + '×' + r.P.l + '</small></div><div class="empty2">이 크기는 ' + r.P.n + '에 안 들어가요</div></div>';
+  return '<div class="card cres' + (i === 0 ? ' best' : '') + '"><div class="ct"><span>' + r.P.n + (i === 0 ? '<em class="cbest">추천</em>' : '') + '</span><small>' + r.P.s + '×' + r.P.l + 'mm</small></div>' +
+    '<div class="cst"><div><small>전지 1장에</small><b>' + r.n + '<i>개</i></b></div><div><small>사용률</small><b>' + Math.round(r.use * 100) + '<i>%</i></b></div><div><small>로스</small><b class="' + (r.loss > .35 ? 'dn' : '') + '">' + Math.round(r.loss * 100) + '<i>%</i></b></div></div>' +
+    sheetSvg(r.P, r.f, CQ) + '<div class="cds">배치 ' + esc(r.f.desc) + ' · 빨간 띠 = 물림</div>' + (extra || '') +
+    (spec ? '<button class="cpy" data-cpy="' + esc(spec) + '">사양서용 복사</button>' : '') + '</div>';
+}
+var CQ = null;
+function renderCalc() {
+  var c = CQ = cq(), h = '';
+  h += '<div class="seg" id="cT">' + [['book', '책자'], ['sheet', '낱장'], ['pack', '전개도']].map(function (o) { return '<button data-t="' + o[0] + '" class="' + (c.t === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>';
+  h += '<div class="seg" id="cM">' + [['size', '사이즈 → 추천'], ['cut', '절수 → 판형']].map(function (o) { return '<button data-m="' + o[0] + '" class="' + (c.m === o[0] ? 'on' : '') + '">' + o[1] + '</button>'; }).join('') + '</div>';
+  var num = function (k, lb, unit, step) { return '<div class="f"><label>' + lb + (unit ? ' (' + unit + ')' : '') + '</label><input type="number" inputmode="decimal" data-k="' + k + '" value="' + c[k] + '"' + (step ? ' step="' + step + '"' : '') + '></div>'; };
+  if (c.m === 'size') {
+    h += '<div class="card"><div class="ct">' + (c.t === 'pack' ? '펼친 크기 (전개도)' : '완성 크기') + '<small>재단 후</small></div>';
+    if (c.t !== 'pack') h += '<div class="chips cpre">' + PRESETS.map(function (p) { return '<button data-pw="' + p[1] + '" data-ph="' + p[2] + '" class="' + (+c.w === p[1] && +c.h === p[2] ? 'on' : '') + '">' + p[0] + '<small>' + p[1] + '×' + p[2] + '</small></button>'; }).join('') + '</div>';
+    h += '<div class="frow">' + num(c.t === 'pack' ? 'cw' : 'w', '가로', 'mm') + num(c.t === 'pack' ? 'ch' : 'h', '세로', 'mm') + '</div>';
+    if (c.t === 'book') h += '<div class="frow">' + num('p', '본문', '쪽') + num('q', '부수', '부') + '</div><div class="frow">' + num('sp', '책등', 'mm', '0.5') + num('fl', '날개', 'mm') + '</div>';
+    else h += '<div class="frow">' + num('q', '수량', '개') + num('ex', '여분', '%') + '</div>';
+    h += '</div>';
+  } else {
+    h += '<div class="card"><div class="ct">전지 · 절수</div><div class="seg" id="cP">' + PAPERS.map(function (P) { return '<button data-pp="' + P.k + '" class="' + (c.paper === P.k ? 'on' : '') + '">' + P.n + ' ' + P.s + '×' + P.l + '</button>'; }).join('') + '</div>' +
+      '<div class="chips">' + CUTS.map(function (n) { return '<button data-cut="' + n + '" class="' + (+c.cut === n ? 'on' : '') + '">' + n + '절</button>'; }).join('') + '</div></div>';
+  }
+  h += '<details class="card cset"><summary class="ct">여유 설정<small>도련 ' + c.bl + ' · 물림 ' + c.gr + ' · 여백 ' + c.sd + 'mm</small></summary><div class="frow" style="margin-top:12px">' + num('bl', '도련(사방)', 'mm') + num('gr', '물림', 'mm') + num('sd', '여백', 'mm') + '</div>' +
+    (c.t === 'book' ? '<div class="frow">' + num('ex', '여분', '%') + '</div>' : '') + '<div class="legend" style="justify-content:flex-start">인쇄소마다 물림·여백이 달라요 · 결(종목/횡목) 방향은 인쇄소와 확인</div></details>';
+  h += '<div id="cRes">' + calcOut(c) + '</div>';
+  $('#main').innerHTML = h; bindCalc();
+}
+function calcOut(c) {
+  var w = +c.w, hh = +c.h, q = Math.max(0, +c.q || 0), ex = 1 + (+c.ex || 0) / 100, out = '';
+  if (c.m === 'cut') {
+    var P = PAPERS.filter(function (x) { return x.k === c.paper; })[0] || PAPERS[0], n = +c.cut;
+    var uS = P.s - c.gr - c.sd, uL = P.l - 2 * c.sd, P2 = { n: P.n, s: uS, l: uL }, cell = cutCell(P2, n), raw = cutCell(P, n);
+    var bb = c.t === 'book' ? +c.bl : 2 * c.bl, mw = cell[0] - bb, mh = cell[1] - bb;
+    var fits = PRESETS.filter(function (p) { return (p[1] <= mw && p[2] <= mh); }).sort(function (a, b) { return b[1] * b[2] - a[1] * a[2]; }).slice(0, 4);
+    out += '<div class="card cres best"><div class="ct"><span>' + cutName(P, n) + '</span><small>칸 ' + raw[0] + '×' + raw[1] + 'mm</small></div>' +
+      '<div class="cst c2"><div><small>최대 완성 크기</small><b>' + Math.floor(mw) + '<i>×</i>' + Math.floor(mh) + '<i>mm</i></b></div><div><small>' + (c.t === 'book' ? '전지 1장(앞뒤)' : '전지 1장에') + '</small><b>' + (c.t === 'book' ? n * 2 + '<i>쪽</i>' : n + '<i>개</i>') + '</b></div></div>' +
+      '<div class="cds">물림·여백·도련을 빼고 계산한 값이에요</div>' +
+      (fits.length ? '<div class="cfit"><small>이 안에 들어가는 판형</small>' + fits.map(function (p) { return '<button data-pw="' + p[1] + '" data-ph="' + p[2] + '">' + p[0] + ' ' + p[1] + '×' + p[2] + '</button>'; }).join('') + '</div>' : '') + '</div>';
+    return out;
+  }
+  if (c.t === 'book') {
+    var pages = Math.max(0, +c.p || 0), R = calcItem(w, hh, c, true);
+    out += '<div class="sec">본문<small>' + w + '×' + hh + ' · ' + pages + '쪽 · ' + fmtN(q) + '부</small></div>';
+    R.forEach(function (r, i) {
+      if (!r.n) { out += resCard(r, i); return; }
+      var per = r.n * 2, dae = Math.floor(pages / 16), rest = pages % 16, sheets = Math.ceil(pages / per * q * ex);
+      var tip = pages % per ? '<div class="cwarn">' + per + '쪽 단위가 아니라 ' + (per - pages % per) + '쪽이 남아요 · ' + (Math.floor(pages / per) * per || per) + '쪽 또는 ' + Math.ceil(pages / per) * per + '쪽이면 딱 맞아요</div>' : '<div class="cok">' + per + '쪽 단위로 딱 맞아요</div>';
+      var ex2 = '<div class="cst sm"><div><small>전지 1장(앞뒤)</small><b>' + per + '<i>쪽</i></b></div><div><small>대수 (16쪽)</small><b>' + dae + '<i>대</i>' + (rest ? ' +' + rest + '<i>쪽</i>' : '') + '</b></div><div><small>필요 전지</small><b>' + fmtN(sheets) + '<i>장</i></b><em>' + yeon(sheets) + '</em></div></div>' + tip;
+      out += resCard(r, i, ex2, '본문 ' + w + '×' + hh + 'mm · ' + pages + 'p · ' + r.P.n + ' ' + r.n + '판걸이(1장 ' + per + 'p) · ' + fmtN(q) + '부 · 전지 ' + fmtN(sheets) + '장(' + yeon(sheets) + ', 여분 ' + c.ex + '% 포함)');
+    });
+    var cw = 2 * w + (+c.sp || 0) + 2 * (+c.fl || 0), Rc = calcItem(cw, hh, c, false);
+    out += '<div class="sec">표지<small>펼친 크기 ' + fmtN(cw, 1) + '×' + hh + ' (앞뒤 + 책등 ' + (+c.sp || 0) + (+c.fl ? ' + 날개 ' + c.fl + '×2' : '') + ')</small></div>';
+    Rc.forEach(function (r, i) {
+      if (!r.n) { out += resCard(r, i); return; }
+      var sh = Math.ceil(q / r.n * ex);
+      out += resCard(r, i, '<div class="cst sm"><div><small>필요 전지</small><b>' + fmtN(sh) + '<i>장</i></b><em>' + yeon(sh) + '</em></div></div>', '표지 ' + fmtN(cw, 1) + '×' + hh + 'mm · ' + r.P.n + ' ' + r.n + '개 걸이 · 전지 ' + fmtN(sh) + '장(' + yeon(sh) + ')');
+    });
+    return out;
+  }
+  var pw = c.t === 'pack' ? +c.cw : w, ph = c.t === 'pack' ? +c.ch : hh, R2 = calcItem(pw, ph, c, false);
+  out += '<div class="sec">' + (c.t === 'pack' ? '전개도' : '낱장') + '<small>' + pw + '×' + ph + ' · ' + fmtN(q) + '개</small></div>';
+  R2.forEach(function (r, i) {
+    if (!r.n) { out += resCard(r, i); return; }
+    var sh = Math.ceil(q / r.n * ex);
+    out += resCard(r, i, '<div class="cst sm"><div><small>필요 전지</small><b>' + fmtN(sh) + '<i>장</i></b><em>' + yeon(sh) + ' · 여분 ' + c.ex + '%</em></div></div>',
+      (c.t === 'pack' ? '전개도 ' : '') + pw + '×' + ph + 'mm · ' + r.P.n + ' ' + r.n + '개 걸이 · ' + fmtN(q) + '개 · 전지 ' + fmtN(sh) + '장(' + yeon(sh) + ')');
+  });
+  return out;
+}
+function bindCalc() {
+  var c = CQ, upd = function (keepInputs) { cqSave(c); if (keepInputs) { $('#cRes').innerHTML = calcOut(c); bindRes(); } else { var y0 = window.scrollY; renderCalc(); window.scrollTo(0, y0); } };
+  $$('#cT button').forEach(function (b) { b.onclick = function () { c.t = b.dataset.t; upd(); }; });
+  $$('#cM button').forEach(function (b) { b.onclick = function () { c.m = b.dataset.m; upd(); }; });
+  $$('#cP button').forEach(function (b) { b.onclick = function () { c.paper = b.dataset.pp; upd(); }; });
+  $$('[data-cut]').forEach(function (b) { b.onclick = function () { c.cut = +b.dataset.cut; upd(); }; });
+  $$('.cpre [data-pw]').forEach(function (b) { b.onclick = function () { c.w = +b.dataset.pw; c.h = +b.dataset.ph; upd(); }; });
+  $$('[data-k]').forEach(function (i) { i.oninput = function () { c[i.dataset.k] = i.value === '' ? '' : +i.value; upd(true); }; });
+  bindRes();
+  function bindRes() {
+    $$('.cfit [data-pw]').forEach(function (b) { b.onclick = function () { c.w = +b.dataset.pw; c.h = +b.dataset.ph; c.m = 'size'; upd(); }; });
+    $$('[data-cpy]').forEach(function (b) { b.onclick = function () { var t = b.dataset.cpy; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { toast('복사했어요 · 사양서에 붙여넣기'); }, function () { prompt('복사해서 쓰세요', t); }); }; });
+  }
+}
+
+/* ───── SPEC 도우미 (2026.10.06) ─────
+   품목 고르면 → 늘 쓰는 스펙(지난 사양서 21개 기준) 채워짐 → 크기·책등·보드·싸개·전개·절수 자동 → 사양서 표로 복사
+   * 숫자 기준은 일반적인 업계 값. 인쇄소·박스업체 기준이 있으면 화면에서 바꾸고 '내 기본값으로 저장' */
+var $ = function (s) { return document.querySelector(s); }, $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var ls = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function toast(t) { var el = $('#toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toast.h); toast.h = setTimeout(function () { el.style.display = 'none'; }, 2200); }
+function r1(v) { return Math.round(v * 10) / 10; }
+function r05(v) { return Math.round(v * 2) / 2; }
+function mm(v) { return (Math.round(v * 10) / 10).toString(); }
+function sz(w, h, d) { return mm(w) + '×' + mm(h) + (d != null ? '×' + mm(d) : '') + 'mm'; }
+
+/* 용지 두께 (㎛) — 와우프레스 제작가이드 표 (아트·스노우·모조) */
+var THICK = {
+  '스노우': { 100: 95, 120: 115, 150: 150, 180: 175, 200: 190, 250: 250, 300: 300 },
+  '아트': { 100: 80, 120: 100, 150: 125, 180: 155, 200: 180, 250: 230, 300: 285 },
+  '모조': { 80: 95, 100: 115, 120: 140, 150: 175, 180: 200, 220: 245, 260: 285 }
+};
+// '스노우 / 120g' 같은 글에서 두께(mm) 추정. 표에 없으면 null
+function thickOf(paper) {
+  var s = String(paper || ''), g = (s.match(/(\d{2,4})\s*g/) || [])[1], k = /스노우/.test(s) ? '스노우' : /아트지|아트 /.test(s + ' ') && !/스티커/.test(s) ? '아트' : /모조/.test(s) ? '모조' : '';
+  if (!k || !g) return null; var T = THICK[k], gs = Object.keys(T).map(Number).sort(function (a, b) { return a - b; });
+  g = +g; if (T[g]) return T[g] / 1000;
+  var lo = gs.filter(function (x) { return x < g; }).pop(), hi = gs.filter(function (x) { return x > g; })[0];
+  if (lo && hi) return (T[lo] + (T[hi] - T[lo]) * (g - lo) / (hi - lo)) / 1000;
+  return null;
+}
+var PAPER_LIST = ['스노우 / 120g', '스노우 / 150g', '스노우 / 180g', '스노우 / 250g', '스노우 / 300g', '아트 / 120g', '아트 / 300g', '모조 / 100g', '모조 / 120g', '모조 / 200g',
+  '앙상블 / 230g', '아르떼 / 210g', '아르떼 UW / 310g', '랑데뷰 / 240g', 'AB(아이보리) / 350g', 'BV(로얄아이보리) / 450g', '로얄 아이보리 / 400g',
+  '아트 스티커 / 90g', '리무버블 아트 스티커 / 90g', '한솔 매직칼라 / 120g', '갱판지 / 1200g', 'E골 백색 골판지', 'G골 골판지'];
+
+/* ── 절수 계산: CALC 탭 코드(calc.js)의 fitSheet 사용 ── */
+var MAR = { bl: 3, gr: 10, sd: 5 };
+function bestSheet(w, h, book) {
+  var bb = book ? MAR.bl : 2 * MAR.bl;
+  return PAPERS.map(function (P) { var f = fitSheet(P, w + bb, h + bb, MAR, book); return { P: P, n: f.n, loss: f.n ? 1 - f.n * w * h / (P.s * P.l) : 1 }; })
+    .filter(function (r) { return r.n; }).sort(function (a, b) { return a.loss - b.loss; })[0] || null;
+}
+
+/* ── 품목 템플릿: 지난 사양서에서 가장 많이 쓴 값 ── */
+// 행 필드: cat(대분류) set(구성) item(품목) size paper qty print way coat post bind pack
+var T = [
+  { id: 'pc', g: '지류', n: '포토카드', in: { w: 55, h: 85, q: 1000, k: 1 },
+    rows: function (v) { return [{ item: '포토카드', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단 / 귀도리 (모서리 3R)', pack: '' }] },
+  { id: 'pt', g: '지류', n: '엽서', in: { w: 100, h: 150, q: 1000, k: 1 },
+    rows: function (v) { return [{ item: '엽서', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 코팅', post: '-', bind: '재단', pack: '' }] },
+  { id: 'env', g: '지류', n: '엽서 봉투', in: { w: 100, h: 150, q: 1000, k: 1, mg: 4, fl: 15, lid: 35 }, note: '내용물 크기를 넣으면 봉투 크기 · 대략 전개를 계산해요 (정확한 건 목형 도면)',
+    calc: function (v) { var W = v.w + 2 * v.mg, H = v.h + 2 * v.mg; return [['봉투 완성', sz(W, H)], ['대략 전개 (옆날개 ' + v.fl + ' · 뚜껑 ' + v.lid + ')', sz(W + 2 * v.fl, 2 * H + v.lid)]]; },
+    rows: function (v) { var W = v.w + 2 * v.mg, H = v.h + 2 * v.mg; return [{ item: '엽서 봉투', size: sz(W, H) + ' (전개 ' + sz(W + 2 * v.fl, 2 * H + v.lid) + ')', qty: '1장', flat: [W + 2 * v.fl, 2 * H + v.lid, 1] }]; },
+    def: [{ paper: '모조지 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '-', post: '-', bind: '톰슨 / 오시 / 접착', pack: '' }] },
+  { id: 'ps', g: '지류', n: '포스터', in: { w: 400, h: 574, q: 500, k: 1 },
+    rows: function (v) { return [{ item: '포스터', size: sz(v.w, v.h), qty: '1장 / 1p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 150g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '-', post: '-', bind: '재단 (지관 포장 시 말기 / 접지 시 십자 접지)', pack: '' }] },
+  { id: 'f4a', g: '지류', n: '4컷 포토 (1줄)', in: { w: 51, h: 152, q: 1000, k: 1 },
+    rows: function (v) { return [{ item: '4컷 포토 (1줄)', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단', pack: '' }] },
+  { id: 'f4b', g: '지류', n: '4컷 포토 (2줄)', in: { w: 102, h: 152, q: 1000, k: 1 },
+    rows: function (v) { return [{ item: '4컷 포토 (2줄)', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 유광 코팅', post: '-', bind: '재단', pack: '' }] },
+  { id: 'tk', g: '지류', n: '티켓', in: { w: 70, h: 140, q: 1000, k: 1 },
+    rows: function (v) { return [{ item: '티켓', size: sz(v.w, v.h), qty: '1장 / 2p', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '스노우 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 코팅', post: '미싱선 (1줄)', bind: '톰슨', pack: '' }] },
+  { id: 'st', g: '지류', n: '판 스티커', in: { w: 70, h: 100, q: 1000, k: 1 }, note: '스티커 + 대지(뒷판) 2행으로 나와요',
+    rows: function (v) { return [{ set: '스티커', item: '판 스티커', size: sz(v.w, v.h) + ' / 1p', qty: '1장', flat: [v.w, v.h, 1] }, { set: '대지', item: '판 스티커 대지', size: sz(v.w, v.h) + ' / 2p', qty: '1장', flat: [v.w, v.h, 1] }]; },
+    def: [{ paper: '아트 스티커 / 90g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '전면 / 무광 코팅', post: '-', bind: '톰슨 (반칼 · 목형)', pack: '' },
+      { paper: '스노우지 / 300g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 무광 라미', post: '-', bind: '재단', pack: '' }] },
+  { id: 'acc', g: '지류', n: '아코디언 북', in: { w: 110, h: 110, n: 8, q: 500, k: 1 }, note: '한 면 크기 × 단수 = 펼침 크기 · 오시는 단수 −1줄',
+    calc: function (v) { var W = v.w * v.n, warn = W > 1091 - 2 * MAR.sd ? ' · 46전 긴 변보다 길어서 이어 붙여야 해요' : ''; return [['펼침 크기', sz(W, v.h) + warn], ['오시 · 접지', (v.n - 1) + '줄 / ' + v.n + '단 병풍접지']]; },
+    rows: function (v) { return [{ item: '아코디언 북', size: sz(v.w, v.h) + ' (펼침면 ' + sz(v.w * v.n, v.h) + ')', qty: '1장 / ' + v.n * 2 + 'p', flat: [v.w * v.n, v.h, 1], bindAuto: '오시 ' + (v.n - 1) + '줄 / ' + v.n + '단 병풍접지' }]; },
+    def: [{ paper: '스노우 / 250g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 기계 코팅', post: '-', bind: '', pack: '' }] },
+  { id: 'bk', g: '책자', n: '책자 (무선·PUR)', in: { w: 148, h: 210, p: 64, q: 500, k: 1, ti: 0, tc: 0 }, note: '책등 = 본문 장수(쪽수÷2) × 본문 두께 + 표지 두께 × 2 · 0.5mm 단위로 반올림',
+    calc: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [['책등', s.txt], ['표지 펼침', sz(2 * v.w + s.mm, v.h) + ' (앞뒤 + 책등)']]; },
+    rows: function (v, R) { var s = spineOf(v, R[1].paper, R[0].paper); return [{ set: '표지', item: '표지', size: sz(v.w, v.h) + ' (펼침 ' + sz(2 * v.w + s.mm, v.h) + ', 책등 ' + mm(s.mm) + 'mm)', qty: '1장 / 4p', flat: [2 * v.w + s.mm, v.h, 1] },
+      { set: '본문', item: '본문', size: sz(v.w, v.h), qty: v.p + 'p', book: [v.w, v.h, v.p] }]; },
+    def: [{ paper: '스노우 / 250g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: 'PUR 무선제본', pack: '' },
+      { paper: '모조 / 120g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: 'PUR 무선제본', pack: '' }] },
+  { id: 'jc', g: '책자', n: '책자 (중철)', in: { w: 148, h: 210, p: 32, q: 500, k: 1 }, note: '중철은 4쪽 단위 · 책등 없음',
+    calc: function (v) { return [['쪽수', v.p % 4 ? v.p + '쪽은 4의 배수가 아니에요 → ' + Math.ceil(v.p / 4) * 4 + '쪽 권장' : v.p + '쪽 (4의 배수 OK)']]; },
+    rows: function (v) { return [{ item: '중철 책자', size: sz(v.w, v.h), qty: v.p + 'p (표지 포함)', book: [v.w, v.h, v.p] }]; },
+    def: [{ paper: '스노우 / 180g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: '중철제본', pack: '' }] },
+  { id: 'hc', g: '책자', n: '하드커버 (양장)', in: { w: 148, h: 210, p: 144, q: 500, k: 1, bd: 2, jt: 10, wr: 20, ti: 0 },
+    note: '보드 = 판형 가로 −4 · 세로 +7 / 책등 보드 = 책등 +4 / 홈 각 ' + '10mm / 싸개 사방 20mm 접어넣기 (업체마다 달라요)',
+    calc: function (v, R) { var H = hcOf(v, R); return [['책등 (본문 + 면지)', H.spTxt], ['앞·뒤 보드', sz(H.bw, H.bh) + ' × 2장'], ['책등 보드', sz(H.sw, H.bh)], ['싸개지', sz(H.cw, H.ch)], ['면지 (펼침)', sz(2 * v.w, v.h) + ' × 2장']]; },
+    rows: function (v, R) { var H = hcOf(v, R); return [
+      { set: '싸개', item: '싸개지', size: sz(H.cw, H.ch), qty: '1장 / 1p', flat: [H.cw, H.ch, 1] },
+      { set: '보드', item: '보드', size: '앞·뒤 ' + sz(H.bw, H.bh) + ' ×2 / 책등 ' + sz(H.sw, H.bh), qty: '3pcs' },
+      { set: '면지', item: '면지', size: sz(2 * v.w, v.h) + ' (펼침)', qty: '2장', flat: [2 * v.w, v.h, 2] },
+      { set: '본문', item: '본문', size: sz(v.w, v.h), qty: v.p + 'p', book: [v.w, v.h, v.p] }]; },
+    def: [{ paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '합지 / 싸바리', pack: '' },
+      { paper: '갱판지 / 1200g (2mm)', print: '-', way: '-', coat: '-', post: '-', bind: '재단', pack: '' },
+      { paper: '한솔 매직칼라 / 120g', print: '-', way: '-', coat: '-', post: '-', bind: '재단 / 접착', pack: '' },
+      { paper: '모조 / 120g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '-', post: '-', bind: '사철 양장제본', pack: '' }] },
+  { id: 'cal', g: '지류', n: '데스크 캘린더', in: { w: 220, h: 150, n: 13, q: 500, k: 1 }, note: '본문 매수 + 받침대(갱판지 + 매직칼라 합지)',
+    rows: function (v) { return [{ set: '본문', item: '캘린더 본문', size: sz(v.w, v.h), qty: v.n + '매 (' + v.n * 2 + 'p)', flat: [v.w, v.h, v.n] },
+      { set: '받침대', item: '받침대 싸개', size: '받침대에 맞춤', qty: '2p' }, { set: '받침대', item: '받침대 보드', size: '받침대에 맞춤', qty: '-' }]; },
+    def: [{ paper: '앙상블 / 230g', print: '4/4', way: '옵셋 (CMYK/CMYK)', coat: '양면 / 기계 코팅', post: '타공 (트윈링 규격 맞춤)', bind: '상철 트윈링 (화이트)', pack: '' },
+      { paper: '한솔 매직칼라 / 120g', print: '-', way: '-', coat: '-', post: '타공 (트윈링 규격 맞춤)', bind: '합지', pack: '' },
+      { paper: '갱판지 / 1200g', print: '-', way: '-', coat: '-', post: '타공 (트윈링 규격 맞춤)', bind: '합지', pack: '' }] },
+  { id: 'sb', g: '패키지', n: '싸바리 박스 (천지)', in: { L: 200, W: 270, H: 50, Hl: 50, q: 500, k: 1, bd: 2, cl: 1, wr: 15 },
+    note: '내경 기준 · 상짝은 하짝 외경 + 사방 여유 · 싸개는 높이만큼 감싸고 접어넣기 15mm (업체마다 달라요)',
+    calc: function (v) { var B = sbOf(v); return [['하짝 외경', sz(B.oL, B.oW, B.oH)], ['하짝 싸개지', sz(B.c1L, B.c1W)], ['상짝 내경', sz(B.iL2, B.iW2, v.Hl)], ['상짝 외경', sz(B.oL2, B.oW2, B.oH2)], ['상짝 싸개지', sz(B.c2L, B.c2W)], ['바닥 속지', sz(v.L - 1, v.W - 1)]]; },
+    rows: function (v) { var B = sbOf(v); return [
+      { set: '상짝', item: '상짝 싸개지', size: sz(B.c2L, B.c2W) + ' (상짝 외경 ' + sz(B.oL2, B.oW2, B.oH2) + ')', qty: '1장 / 1p', flat: [B.c2L, B.c2W, 1] },
+      { set: '하짝', item: '하짝 싸개지', size: sz(B.c1L, B.c1W) + ' (하짝 외경 ' + sz(B.oL, B.oW, B.oH) + ')', qty: '1장 / 1p', flat: [B.c1L, B.c1W, 1] },
+      { set: '보드', item: '보드', size: '하짝 내경 ' + sz(v.L, v.W, v.H) + ' 맞춤', qty: '-' }]; },
+    def: [{ paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '무광 은박 (태창 은무광 120)', bind: '싸바리 / 조립', pack: '' },
+      { paper: '스노우 / 120g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '싸바리 / 조립', pack: '' },
+      { paper: '갱판지 / 1200g (2mm)', print: '-', way: '-', coat: '-', post: '-', bind: '재단 / 배접', pack: '' }] },
+  { id: 'ct', g: '패키지', n: '단상자 (지기)', in: { L: 100, D: 40, H: 150, q: 1000, k: 1, gl: 15, tk: 15 },
+    note: '정면 가로 L · 옆 폭 D · 높이 H (내경) / 대략 전개 = 가로 2L+2D+풀칠날개, 세로 H+2(D+꽂이) · 정확한 건 목형 도면',
+    calc: function (v) { var E = ctOf(v); return [['대략 전개', sz(E[0], E[1])]]; },
+    rows: function (v) { var E = ctOf(v); return [{ item: '단상자', size: sz(v.L, v.D, v.H) + ' (내경, 전개 약 ' + sz(E[0], E[1]) + ')', qty: '1장 / 1p', flat: [E[0], E[1], 1] }]; },
+    def: [{ paper: 'AB(아이보리) / 350g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '톰슨 / 오시 / 접착', pack: '' }] },
+  { id: 'cb', g: '패키지', n: '골판지 박스 (G형·P형)', in: { L: 200, W: 160, H: 30, q: 500, k: 1, f: 'E', t: 'G' },
+    note: '내용물(내경) 기준 대략 외경 · E골 1.5mm / B골 3mm (유패키지 예시 기준) · G골은 E골보다 얇아서 실제는 조금 작아요',
+    calc: function (v) { var O = cbOf(v); return [['대략 외경 (' + v.t + '형 ' + v.f + '골)', sz(O[0], O[1], O[2])]]; },
+    rows: function (v) { var O = cbOf(v); return [{ set: '표면지', item: v.t + '형 박스 (' + v.f + '골 합지)', size: sz(v.L, v.W, v.H) + ' (내경, 외경 약 ' + sz(O[0], O[1], O[2]) + ')', qty: '1장 / 1p' },
+      { set: '골판지', item: v.f + '골 골판지', size: '표면지에 맞춤', qty: '-' }]; },
+    def: [{ paper: '스노우 / 250g', print: '4/0', way: '옵셋 (CMYK/0)', coat: '단면 / 무광 코팅', post: '-', bind: '합지(상합) / 톰슨 / 오시 / 접착 / 조립', pack: '' },
+      { paper: 'E골 백색 골판지', print: '-', way: '-', coat: '-', post: '-', bind: '합지', pack: '' }] }
+];
+var IN_LABEL = { w: ['가로', 'mm'], h: ['세로', 'mm'], q: ['수량', '개'], k: ['구성', '종'], p: ['쪽수', 'p'], n: ['단수/매수', ''], mg: ['봉투 여유(한쪽)', 'mm'], fl: ['옆날개', 'mm'], lid: ['뚜껑', 'mm'],
+  ti: ['본문 두께 직접', 'mm (0=자동)'], tc: ['표지 두께 직접', 'mm (0=자동)'], bd: ['보드 두께', 'mm'], jt: ['홈', 'mm'], wr: ['접어넣기', 'mm'], L: ['가로(L)', 'mm'], W: ['세로(W)', 'mm'], D: ['폭(D)', 'mm'],
+  H: ['높이(H)', 'mm'], Hl: ['상짝 높이', 'mm'], cl: ['상짝 여유(한쪽)', 'mm'], gl: ['풀칠날개', 'mm'], tk: ['꽂이날개', 'mm'], f: ['골', ''], t: ['형태', ''] };
+
+function spineOf(v, inner, cover) {
+  var ti = +v.ti || thickOf(inner), tc = +v.tc || thickOf(cover);
+  if (!ti) return { mm: 0, txt: '본문 용지 두께를 몰라요 · "본문 두께 직접"에 mm로 넣어 주세요' };
+  var s = r05(v.p / 2 * ti + 2 * (tc || 0));
+  return { mm: s, txt: mm(s) + 'mm (본문 ' + v.p / 2 + '장 × ' + mm(ti * 1000) + '㎛' + (tc ? ' + 표지 ' + mm(tc * 1000) + '㎛×2' : '') + ')' };
+}
+function hcOf(v, R) {
+  var ti = +v.ti || thickOf(R[3].paper), te = thickOf(R[2].paper) || 0.14;
+  var sp = ti ? r05(v.p / 2 * ti + 2 * te) : 0;
+  var bw = v.w - 4, bh = v.h + 7, sw = sp + 4, cw = 2 * bw + sw + 2 * v.jt + 2 * v.wr, ch = bh + 2 * v.wr;
+  return { sp: sp, spTxt: ti ? mm(sp) + 'mm' : '본문 두께를 몰라요 · 직접 입력', bw: bw, bh: bh, sw: sw, cw: cw, ch: ch };
+}
+function sbOf(v) {
+  var t = +v.bd, oL = v.L + 2 * t, oW = v.W + 2 * t, oH = v.H + t, iL2 = oL + 2 * v.cl, iW2 = oW + 2 * v.cl, oL2 = iL2 + 2 * t, oW2 = iW2 + 2 * t, oH2 = +v.Hl + t;
+  return { oL: oL, oW: oW, oH: oH, c1L: oL + 2 * oH + 2 * v.wr, c1W: oW + 2 * oH + 2 * v.wr, iL2: iL2, iW2: iW2, oL2: oL2, oW2: oW2, oH2: oH2, c2L: oL2 + 2 * oH2 + 2 * v.wr, c2W: oW2 + 2 * oH2 + 2 * v.wr };
+}
+function ctOf(v) { return [2 * v.L + 2 * v.D + +v.gl, +v.H + 2 * (+v.D + +v.tk)]; }
+function cbOf(v) { var A = { GE: [15, 3, 3], GB: [23, 4, 4], PE: [3, 10, 3], PB: [4, 15, 4] }[v.t + v.f] || [15, 3, 3]; return [v.L + A[0], v.W + A[1], v.H + A[2]]; }
+
+/* ── 상태 ── */
+var S = { view: ls.get('sp:view') || 'list', id: ls.get('sp:id') || '' };
+function tpl(id) { return T.filter(function (t) { return t.id === id; })[0]; }
+function stateOf(t) {
+  var my = {}; try { my = JSON.parse(ls.get('sp:my:' + t.id) || '{}'); } catch (e) {}
+  var v = JSON.parse(JSON.stringify(t.in)), R = JSON.parse(JSON.stringify(t.def));
+  if (my.v) for (var k in my.v) v[k] = my.v[k];
+  if (my.R) my.R.forEach(function (r, i) { if (R[i]) for (var k2 in r) R[i][k2] = r[k2]; });
+  return { v: v, R: R };
+}
+var CUR = null;
+
+function render() {
+  $$('#nav button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === (S.view === 'one' ? 'list' : S.view)); });
+  ({ list: renderList, one: renderOne, paper: renderPaper, calc: renderCalc })[S.view]();
+}
+function renderList() {
+  var h = '<div class="phd"><b>품목 고르기</b><small>지난 사양서에서 많이 쓴 스펙이 미리 채워져요</small></div>';
+  ['지류', '책자', '패키지'].forEach(function (g) {
+    h += '<div class="sec">' + g + '</div><div class="tg">' + T.filter(function (t) { return t.g === g; }).map(function (t) {
+      var my = ls.get('sp:my:' + t.id); return '<button data-id="' + t.id + '"><b>' + esc(t.n) + '</b><small>' + esc(t.def[0].paper) + (my ? ' · 내 기본값' : '') + '</small></button>';
+    }).join('') + '</div>';
+  });
+  $('#main').innerHTML = h;
+  $$('.tg button').forEach(function (b) { b.onclick = function () { S.id = b.dataset.id; S.view = 'one'; ls.set('sp:id', S.id); ls.set('sp:view', 'one'); window.scrollTo(0, 0); render(); }; });
+}
+function renderOne() {
+  var t = tpl(S.id); if (!t) { S.view = 'list'; return render(); }
+  if (!CUR || CUR.id !== t.id) { var st = stateOf(t); CUR = { id: t.id, v: st.v, R: st.R }; }
+  var v = CUR.v, h = '<div class="phd"><button class="bk" id="back" aria-label="목록">‹</button><b>' + esc(t.n) + '</b></div>';
+  h += '<div class="card"><div class="ct">입력</div><div class="ig">' + Object.keys(v).map(function (k) {
+    var L = IN_LABEL[k] || [k, ''];
+    if (k === 'f') return '<div class="f"><label>' + L[0] + '</label><select data-v="f">' + ['E', 'B'].map(function (o) { return '<option' + (v.f === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></div>';
+    if (k === 't') return '<div class="f"><label>' + L[0] + '</label><select data-v="t">' + ['G', 'P'].map(function (o) { return '<option value="' + o + '"' + (v.t === o ? ' selected' : '') + '>' + o + '형</option>'; }).join('') + '</select></div>';
+    return '<div class="f"><label>' + L[0] + (L[1] ? ' <i>' + L[1] + '</i>' : '') + '</label><input type="number" inputmode="decimal" step="any" data-v="' + k + '" value="' + v[k] + '"></div>';
+  }).join('') + '</div>' + (t.note ? '<div class="nt">' + esc(t.note) + '</div>' : '') + '</div>';
+  h += '<div id="out">' + outHtml(t) + '</div>';
+  h += '<div class="acts"><button class="sv" id="save">내 기본값으로 저장</button><button class="rs" id="reset">처음 값으로</button></div>';
+  $('#main').innerHTML = h; bindOne(t);
+}
+function outHtml(t) {
+  var v = CUR.v, R = CUR.R, h = '';
+  if (t.calc) h += '<div class="card"><div class="ct">자동 계산</div><dl class="cl">' + t.calc(v, R).map(function (p) { return '<dt>' + esc(p[0]) + '</dt><dd>' + esc(p[1]) + '</dd>'; }).join('') + '</dl></div>';
+  var rows = t.rows(v, R);
+  h += '<div class="sec">사양서 행<small>' + rows.length + '행 · 칸을 눌러 고칠 수 있어요</small></div>';
+  rows.forEach(function (r, i) {
+    var d = R[i] || {}, bs = r.flat ? bestSheet(r.flat[0], r.flat[1], false) : r.book ? bestSheet(r.book[0], r.book[1], true) : null, sheet = '';
+    if (bs) {
+      var need = r.flat ? Math.ceil(v.q * (v.k || 1) * r.flat[2] / bs.n * 1.05) : Math.ceil(r.book[2] / (bs.n * 2) * v.q * 1.05);
+      sheet = '<div class="sh"><b>' + bs.P.n + '</b> ' + (r.book ? bs.n + '판걸이 (1장 ' + bs.n * 2 + 'p)' : bs.n + '개 걸이') + ' · 로스 ' + Math.round(bs.loss * 100) + '% · 전지 약 ' + fmtN(need) + '장 (' + fmtN(need / 500, 2) + '연, 여분 5%)</div>';
+    }
+    h += '<div class="card rw"><div class="rh"><b>' + esc(r.set && r.item.indexOf(r.set) < 0 ? r.set + ' · ' : '') + esc(r.item) + '</b><small>' + esc(r.size) + ' · ' + esc(r.qty) + '</small></div>' +
+      ['paper', 'print', 'way', 'coat', 'post', 'bind', 'pack'].map(function (k) {
+        var lb = { paper: '종이', print: '인쇄도수', way: '방식·컬러', coat: '코팅', post: '박·형압·에폭시·미싱', bind: '접지·제본·톰슨', pack: '포장' }[k];
+        var val = k === 'bind' && r.bindAuto && !d.bind ? r.bindAuto : d[k] || '';
+        return '<label class="fr"><span>' + lb + '</span><input data-r="' + i + '" data-k="' + k + '" value="' + esc(val) + '"' + (k === 'paper' ? ' list="papers"' : '') + '></label>';
+      }).join('') + sheet + '</div>';
+  });
+  h += '<button class="cp" id="copy">사양서 표로 복사 (시트에 붙여넣기)</button><div class="nt c">복사한 뒤 사양서 시트의 \'대분류\' 칸을 누르고 붙여넣으면 칸마다 들어가요</div>';
+  return h;
+}
+function tsv(t) {
+  var v = CUR.v, R = CUR.R, rows = t.rows(v, R);
+  return rows.map(function (r, i) {
+    var d = R[i] || {}, bind = d.bind || r.bindAuto || '';
+    return [t.n, (r.set ? r.set + ' ' : '') + (v.k > 1 ? v.k + '종' : '1종'), r.item, r.size, d.paper || '', r.qty, d.print || '', d.way || '', d.coat || '', d.post || '', bind, d.pack || ''].map(function (x) { return String(x).replace(/[\t\n]/g, ' '); }).join('\t');
+  }).join('\n');
+}
+function bindOne(t) {
+  $('#back').onclick = function () { S.view = 'list'; ls.set('sp:view', 'list'); window.scrollTo(0, 0); render(); };
+  var redraw = function () { $('#out').innerHTML = outHtml(t); bindOut(); };
+  $$('[data-v]').forEach(function (i) { i.oninput = i.onchange = function () { CUR.v[i.dataset.v] = i.tagName === 'SELECT' ? i.value : (i.value === '' ? 0 : +i.value); redraw(); }; });
+  $('#save').onclick = function () { ls.set('sp:my:' + t.id, JSON.stringify({ v: CUR.v, R: CUR.R })); toast('이 품목의 내 기본값으로 저장했어요'); };
+  $('#reset').onclick = function () { ls.set('sp:my:' + t.id, ''); CUR = null; renderOne(); toast('처음 값으로 되돌렸어요'); };
+  bindOut();
+  function bindOut() {
+    $$('[data-r]').forEach(function (i) { i.onchange = function () { var R = CUR.R; R[+i.dataset.r] = R[+i.dataset.r] || {}; R[+i.dataset.r][i.dataset.k] = i.value; if (i.dataset.k === 'paper') redraw(); }; });
+    $('#copy').onclick = function () {
+      var x = tsv(t);
+      (navigator.clipboard ? navigator.clipboard.writeText(x) : Promise.reject()).then(function () { toast('복사했어요 · 시트에 붙여넣기'); }, function () { var ta = document.createElement('textarea'); ta.value = x; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('복사했어요'); } catch (e) {} ta.remove(); });
+    };
+  }
+}
+function renderPaper() {
+  var h = '<div class="phd"><b>용지 두께</b><small>평량별 두께 (㎛, 와우프레스 제작가이드 기준)</small></div>';
+  Object.keys(THICK).forEach(function (k) {
+    h += '<div class="card"><div class="ct">' + k + (k === '아트' ? '지' : k === '모조' ? '지' : ' 화이트지') + '</div><div class="tt">' + Object.keys(THICK[k]).map(function (g) { return '<div><small>' + g + 'g</small><b>' + THICK[k][g] + '<i>㎛</i></b></div>'; }).join('') + '</div></div>';
+  });
+  h += '<div class="card"><div class="ct">책등 계산법</div><p class="tx">무선·PUR 책등 = <b>본문 장수(쪽수 ÷ 2) × 본문 한 장 두께</b> + 표지 두께 × 2, 0.5mm 단위로 반올림.<br>예) 모조 120g(140㎛) 200쪽 → 100장 × 0.14 = 14mm + 표지 스노우 250g 0.25×2 = 14.5mm<br><br>양장은 본문 + 면지 두께로 책등을 구하고, 책등 보드는 그보다 4mm 크게 · 앞뒤 보드와 사이에 홈 10mm 정도를 둬요.<br><br>같은 평량이어도 제지사·지종마다 두께가 달라요(특히 앙상블·랑데뷰·아르떼 같은 고급지). 정확한 값은 제지사 두께표나 인쇄소 가제본으로 확인하세요.</p></div>';
+  $('#main').innerHTML = h;
+}
+$$('#nav button').forEach(function (b) { b.onclick = function () { S.view = b.dataset.v; ls.set('sp:view', S.view); window.scrollTo(0, 0); render(); }; });
+$('#brand').onclick = function () { S.view = 'list'; ls.set('sp:view', 'list'); window.scrollTo(0, 0); render(); };
+$('#papers').innerHTML = PAPER_LIST.map(function (p) { return '<option value="' + esc(p) + '">'; }).join('');
+render();
+
+</script>
+</body>
+</html>
