@@ -293,7 +293,7 @@ function fillLists() {
 }
 function loadCat() {
   gas('appProofCatalog').then(function (d) {
-    if (d && d.P && d.P.length) { d.FIX = CAT.FIX; d.COLORS = CAT.COLORS; d.SHEET = CAT.SHEET; d.SIZES = CAT.SIZES; CAT = d; ls.set('pr:cat', JSON.stringify(d)); fillLists(); if (S.view === 'ref') renderRef(); }
+    if (d && d.P && d.P.length) { d.FIX = CAT.FIX; d.COLORS = CAT.COLORS; d.SHEET = CAT.SHEET; d.SIZES = CAT.SIZES; CAT = d; ls.set('pr:cat', JSON.stringify(d)); fillLists(); if (S.view === 'ref') renderRef(); setLink(); }
   }).catch(function () {});
 }
 
