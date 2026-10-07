@@ -360,6 +360,9 @@ function calcOut(c) {
   var w = +c.w, hh = +c.h, q = Math.max(0, +c.q || 0), ex = 1 + (+c.ex || 0) / 100, out = '';
   if (c.t === 'die') {
     var dd = DIE.filter(function (x) { return x.id === c.die; })[0] || DIE[0], dv = dieVals(c, dd), G = dieGeom(dd.id, dv), pad = dd.id === 'cover' ? 0 : +c.bl;
+    // 절수(표지·패키지)에도 대략 전개도 먼저 (2026.10.07)
+    out += '<div class="card"><div class="ct">대략 전개도<small>' + mm(G.W) + ' × ' + mm(G.H) + 'mm</small></div>' + dieSvg(G, false) +
+      '<div class="legend"><span><b style="color:#e5243b">━</b> 재단선</span><span><b style="color:#0067d8">┅</b> 접는선(오시)</span></div></div>';
     out += '<div class="sec">' + esc(dd.n) + '<small>전개 ' + fmtN(G.W, 1) + '×' + fmtN(G.H, 1) + 'mm · ' + fmtN(q) + '개</small></div>';
     nestItem(G, c, pad).forEach(function (r, i) {
       if (!r.n) { out += nestCard(r, i, G); return; }
