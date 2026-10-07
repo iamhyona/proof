@@ -1014,6 +1014,7 @@ function renderRef() {
 var DIE = [
   { id: 'sleeve', n: '슬리브', d: '양옆이 뚫린 띠 형태', in: { X: 150, Y: 210, D: 10, g: 15 } },
   { id: 'rte', n: '단상자 (꽂이형)', d: '위아래 꽂이 뚜껑 · 지기 RTE', in: { L: 100, D: 40, H: 150, g: 15, t: 15 } },
+  { id: 'rtg', n: '단상자 (꽂이+풀바닥)', d: '위 꽂이 뚜껑 · 아래 4날개 십자 풀접착', in: { L: 100, D: 40, H: 150, g: 15, t: 15, ov: 10 } },
   { id: 'mailer', n: '가로 G형 박스', d: '시즌그리팅 아웃박스 · 옆벽 두겹 + 앞 꽂이 뚜껑', in: { L: 310, W: 220, H: 40 } },
   { id: 'sabari', n: '싸바리 싸개지', d: '상짝·하짝 한 장씩 · 보드 겉에 감싸기', in: { L: 200, W: 270, H: 50, bd: 2, wr: 15 } },
   { id: 'hard', n: '하드커버 싸개', d: '양장 표지 · 보드 3장 + 홈', in: { w: 148, h: 210, sp: 15, bd: 2, jt: 10, wr: 20 } },
@@ -1021,7 +1022,7 @@ var DIE = [
   { id: 'env', n: '봉투', d: '내용물 기준 · 옆날개 + 아래 + 뚜껑', in: { w: 100, h: 150, mg: 4, fl: 15, lid: 35 } }
 ];
 var DIE_LB = { X: ['정면 가로', 'mm'], Y: ['높이', 'mm'], D: ['폭(옆면)', 'mm'], g: ['풀칠날개', 'mm'], L: ['가로(L)', 'mm'], W: ['세로(W)', 'mm'], H: ['높이(H)', 'mm'], t: ['꽂이날개', 'mm'],
-  bd: ['보드 두께', 'mm'], wr: ['접어넣기', 'mm'], w: ['가로', 'mm'], h: ['세로', 'mm'], sp: ['책등', 'mm'], jt: ['홈', 'mm'], fl: ['날개', 'mm'], bl: ['도련', 'mm'], mg: ['여유(한쪽)', 'mm'], lid: ['뚜껑', 'mm'] };
+  bd: ['보드 두께', 'mm'], wr: ['접어넣기', 'mm'], w: ['가로', 'mm'], h: ['세로', 'mm'], sp: ['책등', 'mm'], jt: ['홈', 'mm'], fl: ['날개', 'mm'], bl: ['도련', 'mm'], ov: ['바닥 겹침', 'mm'], mg: ['여유(한쪽)', 'mm'], lid: ['뚜껑', 'mm'] };
 
 // 도형: c=[[x1,y1,x2,y2],...] 재단선 / f=접는선 / t=치수 글자 [x,y,'글']
 function dieGeom(id, v) {
@@ -1048,6 +1049,23 @@ function dieGeom(id, v) {
     c.push([xs[2], y0, xs[3], y0], [xs[0], yb, xs[1], yb], [xs[4], y0, xs[4], yb]);
     [xs[0], xs[1], xs[2], xs[3]].forEach(function (x) { vf(x, y0, yb); });
     t.push([xs[0] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[1] + D / 2, y0 + Hh / 2, D], [xs[2] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[3] + D / 2, y0 + Hh / 2, D], [xs[0] + L / 2, y0 + Hh / 2 + 12, 'H ' + Hh], [xs[0] + L / 2, tk + D / 2, '뚜껑'], [xs[2] + L / 2, yb + D / 2, '뚜껑']);
+  } else if (id === 'rtg') {
+    // 단상자 위 꽂이 뚜껑 + 아래 풀바닥: 바닥 날개 4장을 십자로 겹쳐 풀 접착 (긴 날개 2장이 ov만큼 겹침) — 2026.10.07
+    var L = +v.L, D = +v.D, Hh = +v.H, g = +v.g, tk = +v.t, ov = v.ov == null ? 10 : +v.ov, y0 = D + tk, yb = y0 + Hh;
+    var bl = Math.min(D, D / 2 + ov / 2), bs = Math.min(D / 2, L / 2);   // 긴 날개(L 면) 깊이 · 짧은 날개(D 면) 깊이
+    W = g + 2 * L + 2 * D; H = yb + Math.max(bl, bs);
+    var xs = [g, g + L, g + L + D, g + 2 * L + D, g + 2 * L + 2 * D], dh = Math.min(D * 0.8, L / 2);
+    open([[g, y0], [0, y0 + 4], [0, yb - 4], [g, yb]], c);
+    open([[xs[0], y0], [xs[0], tk], [xs[0] + 3, 0], [xs[1] - 3, 0], [xs[1], tk], [xs[1], y0]], c); hf(y0, xs[0], xs[1]); hf(tk, xs[0], xs[1]);
+    [[xs[1], xs[2]], [xs[3], xs[4]]].forEach(function (p) { open([[p[0], y0], [p[0] + 2, y0 - dh], [p[1] - 4, y0 - dh], [p[1], y0 - 4], [p[1], y0]], c); hf(y0, p[0], p[1]); });
+    c.push([xs[2], y0, xs[3], y0], [xs[4], y0, xs[4], yb]);
+    [0, 1, 2, 3].forEach(function (i) {
+      var a = xs[i], b = xs[i + 1], dp = i % 2 ? bs : bl, ti = i % 2 ? Math.min(dp * 0.5, (b - a) / 4) : 3;
+      open([[a, yb], [a + ti, yb + dp], [b - ti, yb + dp], [b, yb]], c); hf(yb, a, b);
+    });
+    [xs[0], xs[1], xs[2], xs[3]].forEach(function (x) { vf(x, y0, yb); });
+    t.push([xs[0] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[1] + D / 2, y0 + Hh / 2, D], [xs[2] + L / 2, y0 + Hh / 2, 'L ' + L], [xs[3] + D / 2, y0 + Hh / 2, D], [xs[0] + L / 2, y0 + Hh / 2 + 12, 'H ' + Hh], [xs[0] + L / 2, tk + D / 2, '뚜껑'],
+      [xs[0] + L / 2, yb + bl / 2, '풀'], [xs[2] + L / 2, yb + bl / 2, '풀']);
   } else if (id === 'mailer') {
     // 가로 G형 (롤엔드 앞꽂이): 위→아래 = 앞벽(+귀) / 바닥 + 옆벽 두겹(+고정 날개) / 뒷벽(+귀) / 뚜껑 + 먼지날개 / 앞 꽂이
     var L = +v.L, Wd = +v.W, Hh = +v.H, e = Math.min(2 * Hh - 3, Wd / 2), r = Math.min(4, Hh / 4);
